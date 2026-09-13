@@ -1,0 +1,4818 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Nederlands oefenen — sprookjeswoorden (deel 2)</title>
+    <!-- home screen + iOS: standalone launch, icon, themed status bar.
+         Paths are relative so the app works under a GitHub Pages subpath. -->
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="icon-180.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Nederlands" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f0ece3" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1c1b18" />
+    <style>
+      :root {
+        --bg: #f0ece3;
+        --card: #fbf9f4;
+        --ink: #3b3a36;
+        --accent: #3f72a8;
+        --good: #4f9e63;
+        --bad: #c0604a;
+        --muted: #8d877b;
+        --surface: #f5f1e9;
+        --border: #e2dccf;
+        --chip: #ece6da;
+        --chip-border: #ddd4c4;
+        --row-border: #e6e0d4;
+        --ok-bg: #e9f1e4;
+        --bad-bg: #f6e7e0;
+        --shadow: rgba(60, 50, 30, 0.07);
+      }
+      :root[data-theme="dark"] {
+        --bg: #1c1b18;
+        --card: #24231f;
+        --ink: #dcd9d0;
+        --accent: #6c9cd6;
+        --good: #5aa86f;
+        --bad: #d4715c;
+        --muted: #9a9388;
+        --surface: #2c2b26;
+        --border: #403e37;
+        --chip: #34332d;
+        --chip-border: #4a483f;
+        --row-border: #3a382f;
+        --ok-bg: #25382a;
+        --bad-bg: #3a2622;
+        --shadow: rgba(0, 0, 0, 0.45);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        min-height: 100dvh;
+        padding: 28px 16px;
+      }
+      h1 {
+        font-size: 1.3rem;
+        margin: 0 0 4px;
+        text-align: center;
+      }
+      .sub {
+        color: var(--muted);
+        margin: 0 0 20px;
+        font-size: 0.85rem;
+      }
+
+      .modes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        margin-bottom: 18px;
+        max-width: 560px;
+      }
+      .modes button {
+        border: 1px solid var(--muted);
+        background: transparent;
+        color: var(--ink);
+        padding: 7px 14px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.85rem;
+      }
+      .modes button.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      .modes button:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+
+      .stage {
+        width: min(480px, 92vw);
+        background: var(--card);
+        border-radius: 16px;
+        box-shadow: 0 6px 22px var(--shadow);
+        padding: 28px 24px;
+        min-height: 240px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: 16px;
+      }
+      .label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-bottom: 10px;
+        text-align: center;
+      }
+      .prompt {
+        font-size: 1.45rem;
+        text-align: center;
+        font-weight: 600;
+      }
+      .prompt small {
+        display: block;
+        font-size: 0.95rem;
+        font-weight: 400;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+
+      /* flashcard */
+      .flip {
+        perspective: 1200px;
+        cursor: pointer;
+      }
+      .flip .inner {
+        display: grid;
+        transition: transform 0.5s;
+        transform-style: preserve-3d;
+      }
+      .flip.flipped .inner {
+        transform: rotateY(180deg);
+      }
+      .flip .face {
+        grid-area: 1 / 1;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        background: var(--card);
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .flip .front {
+        transform: rotateY(0deg);
+      }
+      .flip .back {
+        transform: rotateY(180deg);
+      }
+      .verb {
+        font-size: 1.9rem;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .pp {
+        font-size: 0.95rem;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      .sentence {
+        font-size: 1.1rem;
+        margin-top: 12px;
+      }
+      .translation {
+        font-size: 0.95rem;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      .tap {
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-top: 16px;
+      }
+
+      /* choices */
+      .choices {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 18px;
+      }
+      .choices button {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--ink);
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 1.05rem;
+        cursor: pointer;
+        text-align: center;
+      }
+      .choices button:hover {
+        border-color: var(--accent);
+      }
+      .choices button.correct {
+        background: var(--good);
+        border-color: var(--good);
+        color: #fff;
+      }
+      .choices button.wrong {
+        background: var(--bad);
+        border-color: var(--bad);
+        color: #fff;
+      }
+      .choices button.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      .rec-pace {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 16px;
+      }
+      .rec-pace button {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--ink);
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.95rem;
+      }
+      .rec-pace button.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+      .choices button:disabled {
+        cursor: default;
+      }
+
+      /* type */
+      input[type="text"] {
+        width: 100%;
+        padding: 12px;
+        font-size: 1.1rem;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--ink);
+        border-radius: 10px;
+        margin-top: 18px;
+        text-align: center;
+      }
+      input::placeholder {
+        color: var(--muted);
+      }
+      input.correct {
+        border-color: var(--good);
+        background: var(--ok-bg);
+      }
+      input.wrong {
+        border-color: var(--bad);
+        background: var(--bad-bg);
+      }
+
+      /* builder */
+      .answer-zone {
+        min-height: 48px;
+        border: 2px dashed var(--border);
+        border-radius: 10px;
+        padding: 8px;
+        margin-top: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-content: flex-start;
+      }
+      .bank {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 12px;
+        justify-content: center;
+      }
+      .tok {
+        background: var(--chip);
+        color: var(--ink);
+        border: 1px solid var(--chip-border);
+        border-radius: 8px;
+        padding: 7px 12px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+      .answer-zone .tok {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+
+      .feedback {
+        text-align: center;
+        min-height: 24px;
+        margin-top: 14px;
+        font-size: 1rem;
+      }
+      .feedback.good {
+        color: var(--good);
+      }
+      .feedback.bad {
+        color: var(--bad);
+      }
+      .reveal {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .controls button {
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        cursor: pointer;
+      }
+      .controls button.ghost {
+        background: transparent;
+        color: var(--ink);
+        border: 1px solid var(--muted);
+      }
+      .controls button.speak {
+        background: #5a4ec4;
+      }
+      .score {
+        font-size: 0.85rem;
+        color: var(--muted);
+        min-width: 110px;
+        text-align: center;
+      }
+
+      /* choice example reveal */
+      .example {
+        text-align: center;
+        margin-top: 16px;
+        min-height: 0;
+      }
+      .example .nl {
+        font-size: 1.05rem;
+      }
+      .example .en {
+        font-size: 0.9rem;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      /* choice results */
+      .results {
+        margin-top: 14px;
+      }
+      .result-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 4px;
+        border-bottom: 1px solid var(--row-border);
+        font-size: 1rem;
+      }
+      .result-row:last-child {
+        border-bottom: none;
+      }
+      .result-list {
+        margin-top: 14px;
+      }
+      .restart {
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      /* back to index */
+      .back-link {
+        position: fixed;
+        top: 12px;
+        left: 12px;
+        z-index: 20;
+        border: 1px solid var(--muted);
+        background: var(--card);
+        color: var(--ink);
+        padding: 6px 12px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        text-decoration: none;
+      }
+      .back-link:hover { border-color: var(--accent); color: var(--accent); }
+
+      /* theme toggle */
+      .theme-toggle {
+        position: fixed;
+        top: 48px;
+        left: 12px;
+        z-index: 20;
+        border: 1px solid var(--muted);
+        background: var(--card);
+        color: var(--ink);
+        padding: 6px 12px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.8rem;
+      }
+
+      /* vowel pronunciation helper (side panel) */
+      .vowel-toggle {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 20;
+        border: 1px solid var(--muted);
+        background: var(--card);
+        color: var(--ink);
+        padding: 6px 12px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.8rem;
+      }
+      .vowel-panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        height: 100dvh;
+        width: 264px;
+        background: var(--card);
+        box-shadow: -4px 0 20px var(--shadow);
+        padding: 52px 14px 20px;
+        overflow-y: auto;
+        z-index: 15;
+        transform: translateX(100%);
+        transition: transform 0.25s;
+      }
+      .vowel-panel.open {
+        transform: translateX(0);
+      }
+      .vowel-panel h2 {
+        font-size: 0.95rem;
+        margin: 0 0 4px;
+      }
+      .vowel-hint {
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin: 0 0 6px;
+      }
+      .vowel-group {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin: 14px 0 6px;
+      }
+      .vrow {
+        padding: 6px 0;
+        border-bottom: 1px solid var(--row-border);
+      }
+      .vrow .snd {
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+      .vrow .spell {
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+      .vwords {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 5px;
+      }
+      .vword {
+        background: var(--chip);
+        color: var(--ink);
+        border: 1px solid var(--chip-border);
+        border-radius: 7px;
+        padding: 4px 9px;
+        cursor: pointer;
+        font-size: 0.85rem;
+      }
+      .vword:hover {
+        border-color: var(--accent);
+      }
+
+      /* immersive auto-review: stage fills the viewport, everything else hidden */
+      body.immersive {
+        padding: 0;
+        overflow: hidden;
+      }
+      body.immersive > *:not(.stage) {
+        display: none !important;
+      }
+      .stage.immersive {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        max-width: none;
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: var(--bg);
+        padding: 6vmin;
+        gap: 4vmin;
+        overflow-y: auto;
+      }
+      .stage.immersive .label {
+        font-size: clamp(1rem, 3vw, 1.8rem);
+        letter-spacing: 0.15em;
+      }
+      .stage.immersive .rev-big .verb {
+        font-size: clamp(4rem, 18vw, 16rem);
+        line-height: 1.1;
+        overflow-wrap: break-word;
+      }
+      /* An idiom is not a headword. At 18vw a six-word phrase wraps to four
+         lines and runs off the top and bottom of the screen, which is exactly
+         what happened to "iets met een korreltje zout nemen". A phrase borrows
+         the sentence size, which is the size that exists for multi-word Dutch. */
+      .stage.immersive .rev-big .verb.phrase {
+        font-size: clamp(1.3rem, 5.2vw, 3.5rem);
+      }
+      .stage.immersive .rev-big .sentence {
+        font-size: clamp(1.3rem, 5.2vw, 3.5rem);
+        line-height: 1.15;
+        overflow-wrap: break-word;
+      }
+      .stage.immersive .pp {
+        font-size: clamp(1rem, 3vw, 2.2rem);
+        margin-top: 1.5vmin;
+      }
+      .stage.immersive .rev-ex .en {
+        font-size: clamp(1.5rem, 6vw, 4rem);
+      }
+      .stage.immersive .rev-controls {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: calc(26px + env(safe-area-inset-bottom));
+        margin: 0;
+        text-align: center;
+        z-index: 25;
+      }
+      .stage.immersive .restart {
+        font-size: 1.2rem;
+        padding: 14px 30px;
+      }
+      .rev-exit {
+        position: fixed;
+        top: calc(18px + env(safe-area-inset-top));
+        right: 18px;
+        z-index: 30;
+        border: 1px solid var(--muted);
+        background: transparent;
+        color: var(--muted);
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+      .rev-progress {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 6px;
+        background: rgba(138, 132, 121, 0.25);
+        z-index: 30;
+      }
+      .rev-progress > span {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: var(--accent);
+        transition: width 0.3s ease;
+      }
+      .rev-controls button {
+        margin: 0 6px;
+      }
+      .rev-controls .mistake {
+        background: var(--bad);
+      }
+      .rev-controls .mistake.marked {
+        background: var(--good);
+      }
+      .fen-count {
+        display: block;
+        margin-top: 12px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      /* recall level row: start button + small review button */
+      /* batch picker: a size row (5 / 10 / 15 / 20 / alles) over group rows */
+      .batch-sizes {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 6px;
+      }
+      .batch-size {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .batch-size:hover { border-color: var(--accent); color: var(--accent); }
+      .batch-size.on {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+        font-weight: 600;
+      }
+      .batch-row {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 11px 14px;
+        cursor: pointer;
+        font-size: 1rem;
+        color: var(--ink);
+      }
+      .batch-row:hover { border-color: var(--accent); }
+      .batch-head { display: block; font-weight: 600; color: var(--accent); }
+
+      .rec-level-row {
+        display: flex;
+        gap: 8px;
+      }
+      .rec-level-row .rec-start {
+        flex: 1;
+      }
+      .rec-level-row .rec-review {
+        flex: 0 0 auto;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--muted);
+        border-radius: 10px;
+        padding: 0 16px;
+        cursor: pointer;
+        font-size: 0.95rem;
+      }
+      .rec-level-row .rec-review:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* sentence-review popup: Dutch-only list to revise before practice */
+      .rev-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        z-index: 40;
+      }
+      .rev-modal.open {
+        display: flex;
+      }
+      .rev-modal-box {
+        background: var(--card);
+        border-radius: 14px;
+        width: 100%;
+        max-width: 520px;
+        max-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px var(--shadow);
+      }
+      .rev-modal-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--border);
+      }
+      .rev-modal-head span {
+        font-weight: 600;
+      }
+      .rev-modal-head button {
+        border: 1px solid var(--muted);
+        background: transparent;
+        color: var(--ink);
+        border-radius: 20px;
+        padding: 5px 14px;
+        cursor: pointer;
+        font-size: 0.8rem;
+      }
+      .rev-modal-list {
+        overflow-y: auto;
+        padding: 6px 18px 18px;
+      }
+      .rev-sent {
+        padding: 11px 0;
+        border-bottom: 1px solid var(--row-border);
+        font-size: 1.1rem;
+      }
+      .rev-sent:last-child {
+        border-bottom: none;
+      }
+      .rev-sent-nl {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+      }
+      .rev-tr-toggle {
+        border: none;
+        background: none;
+        color: var(--accent);
+        cursor: pointer;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        padding: 0;
+      }
+      .rev-sent-en {
+        color: var(--muted);
+        font-size: 0.95rem;
+        margin-top: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="index.html">&larr; Overzicht</a>
+    <h1>Nederlands oefenen — sprookjeswoorden (deel 2)</h1>
+    <p class="sub" id="sub"></p>
+
+    <div class="modes" id="modes"></div>
+    <div class="stage" id="stage"></div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <div class="controls">
+      <button class="ghost" id="speak">&#128264; Luister</button>
+      <span class="score" id="score"></span>
+      <button id="next">Volgende &rarr;</button>
+      <button class="ghost" id="shuffle">Husselen</button>
+    </div>
+
+    <button class="theme-toggle" id="ttoggle">Donkere modus</button>
+    <button class="vowel-toggle" id="vtoggle">&#128266; Klinkers</button>
+    <div class="vowel-panel open" id="vowels"></div>
+
+    <div class="rev-modal" id="rev-modal">
+      <div class="rev-modal-box">
+        <div class="rev-modal-head">
+          <span id="rev-modal-title"></span>
+          <button id="rev-modal-close">Sluiten</button>
+        </div>
+        <div class="rev-modal-list" id="rev-modal-list"></div>
+      </div>
+    </div>
+
+    <!-- shared vocabulary projection + the verb-form display logic, so this
+         page does not carry its own copy of any verb's principal parts -->
+    <script src="data/vocab.js"></script>
+    <script src="js/verbforms.js"></script>
+    <script src="js/batch.js"></script>
+    <script>
+      const CARDS = [
+  {
+    "term": "schudden",
+    "meaning": "to shake",
+    "pp": "geschud",
+    "group": "werkwoord",
+    "nl": "Ik schud het flesje.",
+    "en": "I shake the little bottle.",
+    "blank": "Ik ___ het flesje.",
+    "answer": "schud",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Hij schudde zijn hoofd.",
+        "en": "He shook his head.",
+        "level": 2
+      },
+      {
+        "nl": "De hond schudt zich droog.",
+        "en": "The dog shakes itself dry.",
+        "level": 3
+      },
+      {
+        "nl": "Ze heeft mijn hand geschud.",
+        "en": "She shook my hand.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "knikken",
+    "meaning": "to nod",
+    "pp": "geknikt",
+    "group": "werkwoord",
+    "nl": "Ik knik ja.",
+    "en": "I nod yes.",
+    "blank": "Ik ___ ja.",
+    "answer": "knik",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Zij knikt vriendelijk.",
+        "en": "She nods kindly.",
+        "level": 2
+      },
+      {
+        "nl": "Hij knikte tevreden.",
+        "en": "He nodded contentedly.",
+        "level": 3
+      },
+      {
+        "nl": "Ze hebben allemaal geknikt.",
+        "en": "They all nodded.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "wijzen",
+    "meaning": "to point",
+    "pp": "gewezen",
+    "group": "werkwoord",
+    "nl": "Ik wijs naar de deur.",
+    "en": "I point at the door.",
+    "blank": "Ik ___ naar de deur.",
+    "answer": "wijs",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Hij wijst de weg.",
+        "en": "He points out the way.",
+        "level": 2
+      },
+      {
+        "nl": "Zij wees naar de lucht.",
+        "en": "She pointed at the sky.",
+        "level": 3
+      },
+      {
+        "nl": "De gids heeft ons de weg gewezen.",
+        "en": "The guide showed us the way.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "glimlachen",
+    "meaning": "to smile",
+    "pp": "geglimlacht",
+    "group": "werkwoord",
+    "nl": "Ik glimlach naar haar.",
+    "en": "I smile at her.",
+    "blank": "Ik ___ naar haar.",
+    "answer": "glimlach",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Het kind glimlacht blij.",
+        "en": "The child smiles happily.",
+        "level": 2
+      },
+      {
+        "nl": "Hij glimlachte verlegen.",
+        "en": "He smiled shyly.",
+        "level": 3
+      },
+      {
+        "nl": "Ze heeft de hele dag geglimlacht.",
+        "en": "She smiled all day.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "staren",
+    "meaning": "to stare",
+    "pp": "gestaard",
+    "group": "werkwoord",
+    "nl": "Ik staar uit het raam.",
+    "en": "I stare out the window.",
+    "blank": "Ik ___ uit het raam.",
+    "answer": "staar",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Hij staart naar de muur.",
+        "en": "He stares at the wall.",
+        "level": 2
+      },
+      {
+        "nl": "Zij staarde in de verte.",
+        "en": "She stared into the distance.",
+        "level": 3
+      },
+      {
+        "nl": "We hebben lang naar de sterren gestaard.",
+        "en": "We stared at the stars for a long time.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "waarschuwen",
+    "meaning": "to warn",
+    "pp": "gewaarschuwd",
+    "group": "werkwoord",
+    "nl": "Ik waarschuw je.",
+    "en": "I warn you.",
+    "blank": "Ik ___ je.",
+    "answer": "waarschuw",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De politie waarschuwt de mensen.",
+        "en": "The police warn the people.",
+        "level": 2
+      },
+      {
+        "nl": "Hij waarschuwde ons voor het gevaar.",
+        "en": "He warned us about the danger.",
+        "level": 3
+      },
+      {
+        "nl": "Niemand heeft mij gewaarschuwd.",
+        "en": "Nobody warned me.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "herhalen",
+    "meaning": "to repeat",
+    "pp": "herhaald",
+    "group": "werkwoord",
+    "nl": "Ik herhaal de vraag.",
+    "en": "I repeat the question.",
+    "blank": "Ik ___ de vraag.",
+    "answer": "herhaal",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Kun je dat herhalen?",
+        "en": "Can you repeat that?",
+        "level": 2
+      },
+      {
+        "nl": "De leraar herhaalde de les.",
+        "en": "The teacher repeated the lesson.",
+        "level": 3
+      },
+      {
+        "nl": "Ze heeft haar woorden herhaald.",
+        "en": "She repeated her words.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "snappen",
+    "meaning": "to get/understand (informal)",
+    "pp": "gesnapt",
+    "group": "werkwoord",
+    "nl": "Ik snap het.",
+    "en": "I get it.",
+    "blank": "Ik ___ het.",
+    "answer": "snap",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Snap je wat ik bedoel?",
+        "en": "Do you get what I mean?",
+        "level": 2
+      },
+      {
+        "nl": "Hij snapte de grap niet.",
+        "en": "He didn't get the joke.",
+        "level": 3
+      },
+      {
+        "nl": "Nu heb ik het eindelijk gesnapt.",
+        "en": "Now I've finally got it.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "blazen",
+    "meaning": "to blow",
+    "pp": "geblazen",
+    "group": "werkwoord",
+    "nl": "Ik blaas de kaars uit.",
+    "en": "I blow out the candle.",
+    "blank": "Ik ___ de kaars uit.",
+    "answer": "blaas",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De wind blaast hard.",
+        "en": "The wind blows hard.",
+        "level": 2
+      },
+      {
+        "nl": "Hij blies op de fluit.",
+        "en": "He blew on the whistle.",
+        "level": 3
+      },
+      {
+        "nl": "Ze heeft de ballon opgeblazen.",
+        "en": "She blew up the balloon.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "brouwen",
+    "meaning": "to brew",
+    "pp": "gebrouwen",
+    "group": "werkwoord",
+    "nl": "Ik brouw thee.",
+    "en": "I brew tea.",
+    "blank": "Ik ___ thee.",
+    "answer": "brouw",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De heks brouwt een drankje.",
+        "en": "The witch brews a potion.",
+        "level": 2
+      },
+      {
+        "nl": "Hij brouwde zijn eigen bier.",
+        "en": "He brewed his own beer.",
+        "level": 3
+      },
+      {
+        "nl": "Ze hebben een sterk brouwsel gebrouwen.",
+        "en": "They brewed a strong concoction.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "vermommen",
+    "meaning": "to disguise",
+    "pp": "vermomd",
+    "group": "werkwoord",
+    "nl": "Ik vermom me als clown.",
+    "en": "I disguise myself as a clown.",
+    "blank": "Ik ___ me als clown.",
+    "answer": "vermom",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Hij vermomt zich als oude man.",
+        "en": "He disguises himself as an old man.",
+        "level": 2
+      },
+      {
+        "nl": "De dief vermomde zich als agent.",
+        "en": "The thief disguised himself as an officer.",
+        "level": 3
+      },
+      {
+        "nl": "Ze heeft zich als prinses vermomd.",
+        "en": "She disguised herself as a princess.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "vergiftigen",
+    "meaning": "to poison",
+    "pp": "vergiftigd",
+    "group": "werkwoord",
+    "nl": "Ik vergiftig de appel niet.",
+    "en": "I don't poison the apple.",
+    "blank": "Ik ___ de appel niet.",
+    "answer": "vergiftig",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De heks vergiftigt het eten.",
+        "en": "The witch poisons the food.",
+        "level": 2
+      },
+      {
+        "nl": "Hij vergiftigde de koning.",
+        "en": "He poisoned the king.",
+        "level": 3
+      },
+      {
+        "nl": "Iemand heeft de bron vergiftigd.",
+        "en": "Someone poisoned the well.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "aanvullen",
+    "meaning": "to add/complement",
+    "pp": "aangevuld",
+    "group": "werkwoord",
+    "nl": "Ik vul de lijst aan.",
+    "en": "I add to the list.",
+    "blank": "Ik ___ de lijst ___.",
+    "answer": "vul aan",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Vul de zin aan.",
+        "en": "Complete the sentence.",
+        "level": 2
+      },
+      {
+        "nl": "Hij vulde mijn verhaal aan.",
+        "en": "He added to my story.",
+        "level": 3
+      },
+      {
+        "nl": "Zij hebben elkaar goed aangevuld.",
+        "en": "They complemented each other well.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "vervolgen",
+    "meaning": "to continue",
+    "pp": "vervolgd",
+    "group": "werkwoord",
+    "nl": "Ik vervolg mijn reis.",
+    "en": "I continue my journey.",
+    "blank": "Ik ___ mijn reis.",
+    "answer": "vervolg",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Zij vervolgt haar verhaal.",
+        "en": "She continues her story.",
+        "level": 2
+      },
+      {
+        "nl": "Hij vervolgde zijn weg.",
+        "en": "He continued on his way.",
+        "level": 3
+      },
+      {
+        "nl": "We hebben de les na de pauze vervolgd.",
+        "en": "We continued the lesson after the break.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "verduidelijken",
+    "meaning": "to clarify",
+    "pp": "verduidelijkt",
+    "group": "werkwoord",
+    "nl": "Ik verduidelijk mijn punt.",
+    "en": "I clarify my point.",
+    "blank": "Ik ___ mijn punt.",
+    "answer": "verduidelijk",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Kun je dat verduidelijken?",
+        "en": "Can you clarify that?",
+        "level": 2
+      },
+      {
+        "nl": "De leraar verduidelijkte de regel.",
+        "en": "The teacher clarified the rule.",
+        "level": 3
+      },
+      {
+        "nl": "Ze heeft haar plan verduidelijkt.",
+        "en": "She clarified her plan.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "uitsteken",
+    "meaning": "to stick out/extend",
+    "pp": "uitgestoken",
+    "group": "werkwoord",
+    "nl": "Ik steek mijn hand uit.",
+    "en": "I stick out my hand.",
+    "blank": "Ik ___ mijn hand ___.",
+    "answer": "steek uit",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Steek je tong niet uit.",
+        "en": "Don't stick out your tongue.",
+        "level": 2
+      },
+      {
+        "nl": "De tak stak boven het water uit.",
+        "en": "The branch stuck out above the water.",
+        "level": 3
+      },
+      {
+        "nl": "Hij heeft zijn arm uitgestoken.",
+        "en": "He held out his arm.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "meenemen",
+    "meaning": "to take along",
+    "pp": "meegenomen",
+    "group": "werkwoord",
+    "nl": "Ik neem een boek mee.",
+    "en": "I take a book along.",
+    "blank": "Ik ___ een boek ___.",
+    "answer": "neem mee",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Neem je paraplu mee.",
+        "en": "Take your umbrella along.",
+        "level": 2
+      },
+      {
+        "nl": "Hij nam de kinderen mee.",
+        "en": "He took the children along.",
+        "level": 3
+      },
+      {
+        "nl": "Ze heeft haar hond meegenomen.",
+        "en": "She brought her dog along.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "dragen",
+    "meaning": "to carry/wear",
+    "pp": "gedragen",
+    "group": "werkwoord",
+    "nl": "Ik draag een tas.",
+    "en": "I carry a bag.",
+    "blank": "Ik ___ een tas.",
+    "answer": "draag",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Zij draagt een rode jas.",
+        "en": "She wears a red coat.",
+        "level": 2
+      },
+      {
+        "nl": "Hij droeg de zware doos.",
+        "en": "He carried the heavy box.",
+        "level": 3
+      },
+      {
+        "nl": "Ze heeft die schoenen nooit gedragen.",
+        "en": "She has never worn those shoes.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "trouwen",
+    "meaning": "to marry",
+    "pp": "getrouwd",
+    "group": "werkwoord",
+    "nl": "Ik trouw in juni.",
+    "en": "I get married in June.",
+    "blank": "Ik ___ in juni.",
+    "answer": "trouw",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Zij trouwt met een prins.",
+        "en": "She marries a prince.",
+        "level": 2
+      },
+      {
+        "nl": "Ze trouwden in de zomer.",
+        "en": "They married in the summer.",
+        "level": 3
+      },
+      {
+        "nl": "Hij is vorig jaar getrouwd.",
+        "en": "He got married last year.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "dansen",
+    "meaning": "to dance",
+    "pp": "gedanst",
+    "group": "werkwoord",
+    "nl": "Ik dans graag.",
+    "en": "I like to dance.",
+    "blank": "Ik ___ graag.",
+    "answer": "dans",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Zij danst op de muziek.",
+        "en": "She dances to the music.",
+        "level": 2
+      },
+      {
+        "nl": "Wij dansten de hele nacht.",
+        "en": "We danced all night.",
+        "level": 3
+      },
+      {
+        "nl": "Ze hebben op het feest gedanst.",
+        "en": "They danced at the party.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "stelen",
+    "meaning": "to steal",
+    "pp": "gestolen",
+    "group": "werkwoord",
+    "nl": "Ik steel niets.",
+    "en": "I steal nothing.",
+    "blank": "Ik ___ niets.",
+    "answer": "steel",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De dief steelt een fiets.",
+        "en": "The thief steals a bike.",
+        "level": 2
+      },
+      {
+        "nl": "Hij stal het goud.",
+        "en": "He stole the gold.",
+        "level": 3
+      },
+      {
+        "nl": "Iemand heeft mijn tas gestolen.",
+        "en": "Someone stole my bag.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "zetten",
+    "meaning": "to put/set",
+    "pp": "gezet",
+    "group": "werkwoord",
+    "nl": "Ik zet de kop op tafel.",
+    "en": "I put the cup on the table.",
+    "blank": "Ik ___ de kop op tafel.",
+    "answer": "zet",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Zet de bloemen in het water.",
+        "en": "Put the flowers in the water.",
+        "level": 2
+      },
+      {
+        "nl": "Hij zette de doos in de hoek.",
+        "en": "He put the box in the corner.",
+        "level": 3
+      },
+      {
+        "nl": "Ze heeft koffie gezet.",
+        "en": "She made coffee.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "fluiten",
+    "meaning": "to whistle",
+    "pp": "gefloten",
+    "group": "werkwoord",
+    "nl": "Ik fluit een liedje.",
+    "en": "I whistle a tune.",
+    "blank": "Ik ___ een liedje.",
+    "answer": "fluit",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De vogel fluit mooi.",
+        "en": "The bird whistles beautifully.",
+        "level": 2
+      },
+      {
+        "nl": "Hij floot naar de hond.",
+        "en": "He whistled at the dog.",
+        "level": 3
+      },
+      {
+        "nl": "De scheidsrechter heeft gefloten.",
+        "en": "The referee blew the whistle.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "thuiskomen",
+    "meaning": "to come home",
+    "pp": "thuisgekomen",
+    "group": "werkwoord",
+    "nl": "Ik kom laat thuis.",
+    "en": "I come home late.",
+    "blank": "Ik ___ laat ___.",
+    "answer": "kom thuis",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Wanneer kom je thuis?",
+        "en": "When are you coming home?",
+        "level": 2
+      },
+      {
+        "nl": "Hij kwam moe thuis.",
+        "en": "He came home tired.",
+        "level": 3
+      },
+      {
+        "nl": "Ze is veilig thuisgekomen.",
+        "en": "She got home safely.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "verdrinken",
+    "meaning": "to drown",
+    "pp": "verdronken",
+    "group": "werkwoord",
+    "nl": "Ik verdrink bijna.",
+    "en": "I'm almost drowning.",
+    "blank": "Ik ___ bijna.",
+    "answer": "verdrink",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De man verdrinkt in de rivier.",
+        "en": "The man is drowning in the river.",
+        "level": 2
+      },
+      {
+        "nl": "Bijna verdronk het kind.",
+        "en": "The child almost drowned.",
+        "level": 3
+      },
+      {
+        "nl": "Twee schapen zijn verdronken.",
+        "en": "Two sheep drowned.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "struikelen",
+    "meaning": "to trip/stumble",
+    "pp": "gestruikeld",
+    "group": "werkwoord",
+    "nl": "Ik struikel bijna.",
+    "en": "I almost stumble.",
+    "blank": "Ik ___ bijna.",
+    "answer": "struikel",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Zij struikelt over een steen.",
+        "en": "She trips over a stone.",
+        "level": 2
+      },
+      {
+        "nl": "Hij struikelde op de trap.",
+        "en": "He stumbled on the stairs.",
+        "level": 3
+      },
+      {
+        "nl": "Ik ben over de kabel gestruikeld.",
+        "en": "I tripped over the cable.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "sleuren",
+    "meaning": "to drag",
+    "pp": "gesleurd",
+    "group": "werkwoord",
+    "nl": "Ik sleur de zak mee.",
+    "en": "I drag the sack along.",
+    "blank": "Ik ___ de zak mee.",
+    "answer": "sleur",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Hij sleurt de tak weg.",
+        "en": "He drags the branch away.",
+        "level": 2
+      },
+      {
+        "nl": "Zij sleurde de koffer over de grond.",
+        "en": "She dragged the suitcase over the ground.",
+        "level": 3
+      },
+      {
+        "nl": "Ze hebben hem naar buiten gesleurd.",
+        "en": "They dragged him outside.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "happen",
+    "meaning": "to gasp/bite",
+    "pp": "gehapt",
+    "group": "werkwoord",
+    "nl": "Ik hap naar lucht.",
+    "en": "I gasp for air.",
+    "blank": "Ik ___ naar lucht.",
+    "answer": "hap",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De vis hapt naar het aas.",
+        "en": "The fish bites at the bait.",
+        "level": 2
+      },
+      {
+        "nl": "De hond hapte naar mijn hand.",
+        "en": "The dog snapped at my hand.",
+        "level": 3
+      },
+      {
+        "nl": "Hij heeft naar adem gehapt.",
+        "en": "He gasped for breath.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "rouwen",
+    "meaning": "to mourn",
+    "pp": "gerouwd",
+    "group": "werkwoord",
+    "nl": "Ik rouw om hem.",
+    "en": "I mourn for him.",
+    "blank": "Ik ___ om hem.",
+    "answer": "rouw",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De familie rouwt om de oma.",
+        "en": "The family mourns the grandmother.",
+        "level": 2
+      },
+      {
+        "nl": "Zij rouwde in stilte.",
+        "en": "She mourned in silence.",
+        "level": 3
+      },
+      {
+        "nl": "Ze hebben lang om hem gerouwd.",
+        "en": "They mourned him for a long time.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "uitnodigen",
+    "meaning": "to invite",
+    "pp": "uitgenodigd",
+    "group": "werkwoord",
+    "nl": "Ik nodig je uit.",
+    "en": "I invite you.",
+    "blank": "Ik ___ je ___.",
+    "answer": "nodig uit",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Nodig je vrienden uit.",
+        "en": "Invite your friends.",
+        "level": 2
+      },
+      {
+        "nl": "Zij nodigde ons uit voor het feest.",
+        "en": "She invited us to the party.",
+        "level": 3
+      },
+      {
+        "nl": "Hij heeft de hele familie uitgenodigd.",
+        "en": "He invited the whole family.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "voorbijkomen",
+    "meaning": "to pass by",
+    "pp": "voorbijgekomen",
+    "group": "werkwoord",
+    "nl": "Ik kom morgen voorbij.",
+    "en": "I'll pass by tomorrow.",
+    "blank": "Ik ___ morgen ___.",
+    "answer": "kom voorbij",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Er komt een trein voorbij.",
+        "en": "A train passes by.",
+        "level": 2
+      },
+      {
+        "nl": "Hij kwam even voorbij.",
+        "en": "He stopped by for a moment.",
+        "level": 3
+      },
+      {
+        "nl": "Die vraag is al eerder voorbijgekomen.",
+        "en": "That question has come up before.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "sjaal",
+    "meaning": "scarf",
+    "art": "de",
+    "pl": "sjaals",
+    "group": "naamwoord",
+    "nl": "Ik draag een sjaal.",
+    "en": "I wear a scarf.",
+    "blank": "Ik draag een ___.",
+    "answer": "sjaal",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De sjaal is warm.",
+        "en": "The scarf is warm.",
+        "level": 2
+      },
+      {
+        "nl": "Deze sjaal is heel zacht.",
+        "en": "This scarf is very soft.",
+        "level": 3
+      },
+      {
+        "nl": "Ze verkopen mooie sjaals in de winkel.",
+        "en": "They sell nice scarves in the shop.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "lach",
+    "meaning": "laugh",
+    "art": "de",
+    "pl": "lachen",
+    "group": "naamwoord",
+    "nl": "Ik hoor een lach.",
+    "en": "I hear a laugh.",
+    "blank": "Ik hoor een ___.",
+    "answer": "lach",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De lach klinkt vrolijk.",
+        "en": "The laugh sounds cheerful.",
+        "level": 2
+      },
+      {
+        "nl": "Die lach van hem is aanstekelijk.",
+        "en": "That laugh of his is contagious.",
+        "level": 3
+      },
+      {
+        "nl": "Er waren veel lachen tijdens de film.",
+        "en": "There were many laughs during the movie.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "vlek",
+    "meaning": "spot/stain",
+    "art": "de",
+    "pl": "vlekken",
+    "group": "naamwoord",
+    "nl": "Ik zie een vlek.",
+    "en": "I see a stain.",
+    "blank": "Ik zie een ___.",
+    "answer": "vlek",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De vlek is groot.",
+        "en": "The stain is big.",
+        "level": 2
+      },
+      {
+        "nl": "Deze vlek gaat er niet uit.",
+        "en": "This stain won't come out.",
+        "level": 3
+      },
+      {
+        "nl": "Er zitten vlekken op zijn hemd.",
+        "en": "There are stains on his shirt.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "poot",
+    "meaning": "paw/leg (animal)",
+    "art": "de",
+    "pl": "poten",
+    "group": "naamwoord",
+    "nl": "De hond heeft een poot.",
+    "en": "The dog has a paw.",
+    "blank": "De hond heeft een ___.",
+    "answer": "poot",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De poot doet pijn.",
+        "en": "The paw hurts.",
+        "level": 2
+      },
+      {
+        "nl": "Die poot is gewond.",
+        "en": "That leg is injured.",
+        "level": 3
+      },
+      {
+        "nl": "De kat heeft vier poten.",
+        "en": "The cat has four paws.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "lip",
+    "meaning": "lip",
+    "art": "de",
+    "pl": "lippen",
+    "group": "naamwoord",
+    "nl": "Ik bijt op mijn lip.",
+    "en": "I bite my lip.",
+    "blank": "Ik bijt op mijn ___.",
+    "answer": "lip",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De lip bloedt.",
+        "en": "The lip is bleeding.",
+        "level": 2
+      },
+      {
+        "nl": "Deze lip is gezwollen.",
+        "en": "This lip is swollen.",
+        "level": 3
+      },
+      {
+        "nl": "Ze heeft rode lippen.",
+        "en": "She has red lips.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "bende",
+    "meaning": "gang/bunch",
+    "art": "de",
+    "pl": "bendes",
+    "group": "naamwoord",
+    "nl": "Ik zie een bende.",
+    "en": "I see a gang.",
+    "blank": "Ik zie een ___.",
+    "answer": "bende",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De bende is gevaarlijk.",
+        "en": "The gang is dangerous.",
+        "level": 2
+      },
+      {
+        "nl": "Die bende steelt fietsen.",
+        "en": "That gang steals bikes.",
+        "level": 3
+      },
+      {
+        "nl": "Er zijn twee bendes in de stad.",
+        "en": "There are two gangs in the city.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "woede",
+    "meaning": "rage/anger",
+    "art": "de",
+    "group": "naamwoord",
+    "nl": "Ik voel woede.",
+    "en": "I feel anger.",
+    "blank": "Ik voel ___.",
+    "answer": "woede",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De woede is groot.",
+        "en": "The anger is great.",
+        "level": 2
+      },
+      {
+        "nl": "Zijn woede was duidelijk te zien.",
+        "en": "His anger was clearly visible.",
+        "level": 3
+      },
+      {
+        "nl": "Die woede in haar ogen maakte me bang.",
+        "en": "That rage in her eyes scared me.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "gezelschap",
+    "meaning": "company/group",
+    "art": "het",
+    "pl": "gezelschappen",
+    "group": "naamwoord",
+    "nl": "Ik hou van gezelschap.",
+    "en": "I like company.",
+    "blank": "Ik hou van ___.",
+    "answer": "gezelschap",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Het gezelschap is gezellig.",
+        "en": "The company is pleasant.",
+        "level": 2
+      },
+      {
+        "nl": "Dit gezelschap reist samen.",
+        "en": "This group travels together.",
+        "level": 3
+      },
+      {
+        "nl": "Er waren twee gezelschappen in de zaal.",
+        "en": "There were two groups in the hall.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "kapper",
+    "meaning": "hairdresser/barber",
+    "art": "de",
+    "pl": "kappers",
+    "group": "naamwoord",
+    "nl": "Ik ga naar de kapper.",
+    "en": "I go to the hairdresser.",
+    "blank": "Ik ga naar de ___.",
+    "answer": "kapper",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De kapper is aardig.",
+        "en": "The hairdresser is kind.",
+        "level": 2
+      },
+      {
+        "nl": "Deze kapper knipt goed.",
+        "en": "This barber cuts well.",
+        "level": 3
+      },
+      {
+        "nl": "Er werken drie kappers in de zaak.",
+        "en": "Three hairdressers work in the shop.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "oord",
+    "meaning": "place/region",
+    "art": "het",
+    "pl": "oorden",
+    "group": "naamwoord",
+    "nl": "Ik ken dit oord.",
+    "en": "I know this place.",
+    "blank": "Ik ken dit ___.",
+    "answer": "oord",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Het oord is rustig.",
+        "en": "The place is quiet.",
+        "level": 2
+      },
+      {
+        "nl": "Dit oord is heel afgelegen.",
+        "en": "This place is very remote.",
+        "level": 3
+      },
+      {
+        "nl": "Ze reizen naar warme oorden.",
+        "en": "They travel to warm places.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "kruid",
+    "meaning": "herb",
+    "art": "het",
+    "pl": "kruiden",
+    "group": "naamwoord",
+    "nl": "Ik gebruik een kruid.",
+    "en": "I use a herb.",
+    "blank": "Ik gebruik een ___.",
+    "answer": "kruid",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Het kruid ruikt sterk.",
+        "en": "The herb smells strong.",
+        "level": 2
+      },
+      {
+        "nl": "Dit kruid is bitter.",
+        "en": "This herb is bitter.",
+        "level": 3
+      },
+      {
+        "nl": "Ze doet verse kruiden in de soep.",
+        "en": "She puts fresh herbs in the soup.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "dwerg",
+    "meaning": "dwarf",
+    "art": "de",
+    "pl": "dwergen",
+    "group": "naamwoord",
+    "nl": "Ik zie een dwerg.",
+    "en": "I see a dwarf.",
+    "blank": "Ik zie een ___.",
+    "answer": "dwerg",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De dwerg is klein.",
+        "en": "The dwarf is small.",
+        "level": 2
+      },
+      {
+        "nl": "Die dwerg woont in het bos.",
+        "en": "That dwarf lives in the forest.",
+        "level": 3
+      },
+      {
+        "nl": "Er zijn zeven dwergen in het verhaal.",
+        "en": "There are seven dwarves in the story.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "hoed",
+    "meaning": "hat",
+    "art": "de",
+    "pl": "hoeden",
+    "group": "naamwoord",
+    "nl": "Ik draag een hoed.",
+    "en": "I wear a hat.",
+    "blank": "Ik draag een ___.",
+    "answer": "hoed",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De hoed is zwart.",
+        "en": "The hat is black.",
+        "level": 2
+      },
+      {
+        "nl": "Deze hoed staat je goed.",
+        "en": "This hat suits you.",
+        "level": 3
+      },
+      {
+        "nl": "Er hangen oude hoeden aan de muur.",
+        "en": "There are old hats hanging on the wall.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "aardbei",
+    "meaning": "strawberry",
+    "art": "de",
+    "pl": "aardbeien",
+    "group": "naamwoord",
+    "nl": "Ik eet een aardbei.",
+    "en": "I eat a strawberry.",
+    "blank": "Ik eet een ___.",
+    "answer": "aardbei",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De aardbei is zoet.",
+        "en": "The strawberry is sweet.",
+        "level": 2
+      },
+      {
+        "nl": "Deze aardbei is rijp.",
+        "en": "This strawberry is ripe.",
+        "level": 3
+      },
+      {
+        "nl": "We plukken aardbeien in de tuin.",
+        "en": "We pick strawberries in the garden.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "verleiding",
+    "meaning": "temptation",
+    "art": "de",
+    "pl": "verleidingen",
+    "group": "naamwoord",
+    "nl": "Ik voel de verleiding.",
+    "en": "I feel the temptation.",
+    "blank": "Ik voel de ___.",
+    "answer": "verleiding",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De verleiding is groot.",
+        "en": "The temptation is great.",
+        "level": 2
+      },
+      {
+        "nl": "Deze verleiding is moeilijk te weerstaan.",
+        "en": "This temptation is hard to resist.",
+        "level": 3
+      },
+      {
+        "nl": "Er zijn overal verleidingen.",
+        "en": "There are temptations everywhere.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "lol",
+    "meaning": "fun",
+    "art": "de",
+    "group": "naamwoord",
+    "nl": "Ik heb lol.",
+    "en": "I'm having fun.",
+    "blank": "Ik heb ___.",
+    "answer": "lol",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De lol is voorbij.",
+        "en": "The fun is over.",
+        "level": 2
+      },
+      {
+        "nl": "We maken veel lol samen.",
+        "en": "We have a lot of fun together.",
+        "level": 3
+      },
+      {
+        "nl": "Die lol van gisteren vergeet ik nooit.",
+        "en": "That fun from yesterday I'll never forget.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "vrouw",
+    "meaning": "woman",
+    "art": "de",
+    "pl": "vrouwen",
+    "group": "naamwoord",
+    "nl": "Ik zie een vrouw.",
+    "en": "I see a woman.",
+    "blank": "Ik zie een ___.",
+    "answer": "vrouw",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De vrouw lacht.",
+        "en": "The woman laughs.",
+        "level": 2
+      },
+      {
+        "nl": "Die vrouw is heel knap.",
+        "en": "That woman is very clever.",
+        "level": 3
+      },
+      {
+        "nl": "Er staan drie vrouwen bij de deur.",
+        "en": "Three women are standing by the door.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "naam",
+    "meaning": "name",
+    "art": "de",
+    "pl": "namen",
+    "group": "naamwoord",
+    "nl": "Ik ken je naam.",
+    "en": "I know your name.",
+    "blank": "Ik ken je ___.",
+    "answer": "naam",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De naam is mooi.",
+        "en": "The name is beautiful.",
+        "level": 2
+      },
+      {
+        "nl": "Die naam vergeet ik steeds.",
+        "en": "That name I keep forgetting.",
+        "level": 3
+      },
+      {
+        "nl": "Er staan veel namen op de lijst.",
+        "en": "There are many names on the list.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "familie",
+    "meaning": "family",
+    "art": "de",
+    "pl": "families",
+    "group": "naamwoord",
+    "nl": "Ik hou van mijn familie.",
+    "en": "I love my family.",
+    "blank": "Ik hou van mijn ___.",
+    "answer": "familie",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De familie is groot.",
+        "en": "The family is big.",
+        "level": 2
+      },
+      {
+        "nl": "Deze familie woont in het dorp.",
+        "en": "This family lives in the village.",
+        "level": 3
+      },
+      {
+        "nl": "Twee families delen het huis.",
+        "en": "Two families share the house.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "prins",
+    "meaning": "prince",
+    "art": "de",
+    "pl": "prinsen",
+    "group": "naamwoord",
+    "nl": "Ik zie een prins.",
+    "en": "I see a prince.",
+    "blank": "Ik zie een ___.",
+    "answer": "prins",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De prins is jong.",
+        "en": "The prince is young.",
+        "level": 2
+      },
+      {
+        "nl": "Die prins woont in een kasteel.",
+        "en": "That prince lives in a castle.",
+        "level": 3
+      },
+      {
+        "nl": "Er waren twee prinsen op het bal.",
+        "en": "There were two princes at the ball.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "kist",
+    "meaning": "chest/box",
+    "art": "de",
+    "pl": "kisten",
+    "group": "naamwoord",
+    "nl": "Ik open de kist.",
+    "en": "I open the chest.",
+    "blank": "Ik open de ___.",
+    "answer": "kist",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De kist is zwaar.",
+        "en": "The chest is heavy.",
+        "level": 2
+      },
+      {
+        "nl": "Deze kist zit vol goud.",
+        "en": "This chest is full of gold.",
+        "level": 3
+      },
+      {
+        "nl": "Er staan oude kisten op zolder.",
+        "en": "There are old chests in the attic.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "arm",
+    "meaning": "arm",
+    "art": "de",
+    "pl": "armen",
+    "group": "naamwoord",
+    "nl": "Ik breek mijn arm.",
+    "en": "I break my arm.",
+    "blank": "Ik breek mijn ___.",
+    "answer": "arm",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De arm doet pijn.",
+        "en": "The arm hurts.",
+        "level": 2
+      },
+      {
+        "nl": "Deze arm is gebroken.",
+        "en": "This arm is broken.",
+        "level": 3
+      },
+      {
+        "nl": "Ze houdt de baby in haar armen.",
+        "en": "She holds the baby in her arms.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "neef",
+    "meaning": "cousin/nephew (male)",
+    "art": "de",
+    "pl": "neven",
+    "group": "naamwoord",
+    "nl": "Ik heb een neef.",
+    "en": "I have a cousin.",
+    "blank": "Ik heb een ___.",
+    "answer": "neef",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De neef is aardig.",
+        "en": "The cousin is kind.",
+        "level": 2
+      },
+      {
+        "nl": "Die neef woont in Amsterdam.",
+        "en": "That cousin lives in Amsterdam.",
+        "level": 3
+      },
+      {
+        "nl": "Ik heb twee neven en drie nichten.",
+        "en": "I have two male cousins and three female cousins.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "nicht",
+    "meaning": "cousin/niece (female)",
+    "art": "de",
+    "pl": "nichten",
+    "group": "naamwoord",
+    "nl": "Ik heb een nicht.",
+    "en": "I have a cousin.",
+    "blank": "Ik heb een ___.",
+    "answer": "nicht",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De nicht is jong.",
+        "en": "The cousin is young.",
+        "level": 2
+      },
+      {
+        "nl": "Die nicht komt vaak langs.",
+        "en": "That cousin visits often.",
+        "level": 3
+      },
+      {
+        "nl": "Al mijn nichten wonen in het buitenland.",
+        "en": "All my female cousins live abroad.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "oom",
+    "meaning": "uncle",
+    "art": "de",
+    "pl": "ooms",
+    "group": "naamwoord",
+    "nl": "Ik bezoek mijn oom.",
+    "en": "I visit my uncle.",
+    "blank": "Ik bezoek mijn ___.",
+    "answer": "oom",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De oom is grappig.",
+        "en": "The uncle is funny.",
+        "level": 2
+      },
+      {
+        "nl": "Die oom vertelt goede verhalen.",
+        "en": "That uncle tells good stories.",
+        "level": 3
+      },
+      {
+        "nl": "Ik heb twee ooms en een tante.",
+        "en": "I have two uncles and one aunt.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "tante",
+    "meaning": "aunt",
+    "art": "de",
+    "pl": "tantes",
+    "group": "naamwoord",
+    "nl": "Ik bel mijn tante.",
+    "en": "I call my aunt.",
+    "blank": "Ik bel mijn ___.",
+    "answer": "tante",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De tante is lief.",
+        "en": "The aunt is sweet.",
+        "level": 2
+      },
+      {
+        "nl": "Deze tante bakt de beste taart.",
+        "en": "This aunt bakes the best cake.",
+        "level": 3
+      },
+      {
+        "nl": "Al mijn tantes komen met kerst.",
+        "en": "All my aunts come at Christmas.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "huwelijk",
+    "meaning": "marriage/wedding",
+    "art": "het",
+    "pl": "huwelijken",
+    "group": "naamwoord",
+    "nl": "Ik vier het huwelijk.",
+    "en": "I celebrate the wedding.",
+    "blank": "Ik vier het ___.",
+    "answer": "huwelijk",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Het huwelijk is gelukkig.",
+        "en": "The marriage is happy.",
+        "level": 2
+      },
+      {
+        "nl": "Dit huwelijk duurt al vijftig jaar.",
+        "en": "This marriage has lasted fifty years.",
+        "level": 3
+      },
+      {
+        "nl": "Er waren twee huwelijken dit weekend.",
+        "en": "There were two weddings this weekend.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "lied",
+    "meaning": "song",
+    "art": "het",
+    "pl": "liederen",
+    "group": "naamwoord",
+    "nl": "Ik zing een lied.",
+    "en": "I sing a song.",
+    "blank": "Ik zing een ___.",
+    "answer": "lied",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Het lied is mooi.",
+        "en": "The song is beautiful.",
+        "level": 2
+      },
+      {
+        "nl": "Dit lied ken ik goed.",
+        "en": "I know this song well.",
+        "level": 3
+      },
+      {
+        "nl": "Ze zingen oude liederen.",
+        "en": "They sing old songs.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "wind",
+    "meaning": "wind",
+    "art": "de",
+    "pl": "winden",
+    "group": "naamwoord",
+    "nl": "Ik voel de wind.",
+    "en": "I feel the wind.",
+    "blank": "Ik voel de ___.",
+    "answer": "wind",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De wind is koud.",
+        "en": "The wind is cold.",
+        "level": 2
+      },
+      {
+        "nl": "Deze wind komt uit het noorden.",
+        "en": "This wind comes from the north.",
+        "level": 3
+      },
+      {
+        "nl": "De sterke winden gooiden de boom om.",
+        "en": "The strong winds knocked the tree over.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "top",
+    "meaning": "top/peak/summit",
+    "art": "de",
+    "pl": "toppen",
+    "group": "naamwoord",
+    "nl": "Ik zie de top.",
+    "en": "I see the summit.",
+    "blank": "Ik zie de ___.",
+    "answer": "top",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De top is hoog.",
+        "en": "The summit is high.",
+        "level": 2
+      },
+      {
+        "nl": "Deze top is bedekt met sneeuw.",
+        "en": "This peak is covered with snow.",
+        "level": 3
+      },
+      {
+        "nl": "De toppen van de bergen zijn wit.",
+        "en": "The peaks of the mountains are white.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "schok",
+    "meaning": "shock/jolt",
+    "art": "de",
+    "pl": "schokken",
+    "group": "naamwoord",
+    "nl": "Ik voel een schok.",
+    "en": "I feel a shock.",
+    "blank": "Ik voel een ___.",
+    "answer": "schok",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De schok was groot.",
+        "en": "The shock was great.",
+        "level": 2
+      },
+      {
+        "nl": "Die schok voelde ik in mijn hele lijf.",
+        "en": "I felt that jolt in my whole body.",
+        "level": 3
+      },
+      {
+        "nl": "Er waren twee schokken tijdens de aardbeving.",
+        "en": "There were two jolts during the earthquake.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "val",
+    "meaning": "fall",
+    "art": "de",
+    "group": "naamwoord",
+    "nl": "Ik overleef de val.",
+    "en": "I survive the fall.",
+    "blank": "Ik overleef de ___.",
+    "answer": "val",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De val was diep.",
+        "en": "The fall was deep.",
+        "level": 2
+      },
+      {
+        "nl": "Die val brak zijn been.",
+        "en": "That fall broke his leg.",
+        "level": 3
+      },
+      {
+        "nl": "Na de val kon hij niet meer lopen.",
+        "en": "After the fall he could no longer walk.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "wortel",
+    "meaning": "root/carrot",
+    "art": "de",
+    "pl": "wortels",
+    "group": "naamwoord",
+    "nl": "Ik eet een wortel.",
+    "en": "I eat a carrot.",
+    "blank": "Ik eet een ___.",
+    "answer": "wortel",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De wortel is oranje.",
+        "en": "The carrot is orange.",
+        "level": 2
+      },
+      {
+        "nl": "Deze wortel zit diep in de grond.",
+        "en": "This root sits deep in the ground.",
+        "level": 3
+      },
+      {
+        "nl": "De boom heeft sterke wortels.",
+        "en": "The tree has strong roots.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "paar",
+    "meaning": "pair/couple",
+    "art": "het",
+    "pl": "paren",
+    "group": "naamwoord",
+    "nl": "Ik koop een paar schoenen.",
+    "en": "I buy a pair of shoes.",
+    "blank": "Ik koop een ___ schoenen.",
+    "answer": "paar",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Het paar danst samen.",
+        "en": "The couple dances together.",
+        "level": 2
+      },
+      {
+        "nl": "Dit paar woont naast ons.",
+        "en": "This couple lives next to us.",
+        "level": 3
+      },
+      {
+        "nl": "Er dansen veel paren op de vloer.",
+        "en": "Many couples are dancing on the floor.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "applaus",
+    "meaning": "applause",
+    "art": "het",
+    "group": "naamwoord",
+    "nl": "Ik hoor applaus.",
+    "en": "I hear applause.",
+    "blank": "Ik hoor ___.",
+    "answer": "applaus",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Het applaus is luid.",
+        "en": "The applause is loud.",
+        "level": 2
+      },
+      {
+        "nl": "Dit applaus verdient zij.",
+        "en": "She deserves this applause.",
+        "level": 3
+      },
+      {
+        "nl": "Na het lied kwam er lang applaus.",
+        "en": "After the song there was long applause.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "krans",
+    "meaning": "wreath",
+    "art": "de",
+    "pl": "kransen",
+    "group": "naamwoord",
+    "nl": "Ik maak een krans.",
+    "en": "I make a wreath.",
+    "blank": "Ik maak een ___.",
+    "answer": "krans",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De krans is mooi.",
+        "en": "The wreath is beautiful.",
+        "level": 2
+      },
+      {
+        "nl": "Deze krans hangt aan de deur.",
+        "en": "This wreath hangs on the door.",
+        "level": 3
+      },
+      {
+        "nl": "Er liggen kransen bij het graf.",
+        "en": "There are wreaths at the grave.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "giftig",
+    "meaning": "poisonous/toxic",
+    "group": "bijvoeglijk",
+    "nl": "De slang is giftig.",
+    "en": "The snake is poisonous.",
+    "blank": "De slang is ___.",
+    "answer": "giftig",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Deze paddenstoel is giftig.",
+        "en": "This mushroom is poisonous.",
+        "level": 2
+      },
+      {
+        "nl": "Pas op, het is een giftige plant.",
+        "en": "Watch out, it's a poisonous plant.",
+        "level": 3
+      },
+      {
+        "nl": "De giftige damp maakte iedereen ziek.",
+        "en": "The toxic fumes made everyone sick.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "triest",
+    "meaning": "sad",
+    "group": "bijvoeglijk",
+    "nl": "Ik ben triest.",
+    "en": "I am sad.",
+    "blank": "Ik ben ___.",
+    "answer": "triest",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Het is een triest verhaal.",
+        "en": "It's a sad story.",
+        "level": 2
+      },
+      {
+        "nl": "Zij keek triest uit het raam.",
+        "en": "She looked sadly out the window.",
+        "level": 3
+      },
+      {
+        "nl": "Het was een trieste dag voor de familie.",
+        "en": "It was a sad day for the family.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "benauwd",
+    "meaning": "stuffy/short of breath/anxious",
+    "group": "bijvoeglijk",
+    "nl": "Ik ben benauwd.",
+    "en": "I'm short of breath.",
+    "blank": "Ik ben ___.",
+    "answer": "benauwd",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De kamer is benauwd.",
+        "en": "The room is stuffy.",
+        "level": 2
+      },
+      {
+        "nl": "Zij voelde zich benauwd in de menigte.",
+        "en": "She felt anxious in the crowd.",
+        "level": 3
+      },
+      {
+        "nl": "Het was een benauwde nacht zonder wind.",
+        "en": "It was a stuffy night without wind.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "griezelig",
+    "meaning": "creepy/scary",
+    "group": "bijvoeglijk",
+    "nl": "Het huis is griezelig.",
+    "en": "The house is creepy.",
+    "blank": "Het huis is ___.",
+    "answer": "griezelig",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Dit is een griezelig geluid.",
+        "en": "This is a creepy sound.",
+        "level": 2
+      },
+      {
+        "nl": "De film was echt griezelig.",
+        "en": "The movie was really scary.",
+        "level": 3
+      },
+      {
+        "nl": "We liepen door het griezelige bos.",
+        "en": "We walked through the creepy forest.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "knap",
+    "meaning": "handsome/clever",
+    "group": "bijvoeglijk",
+    "nl": "Hij is knap.",
+    "en": "He is handsome.",
+    "blank": "Hij is ___.",
+    "answer": "knap",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Zij is heel knap.",
+        "en": "She is very clever.",
+        "level": 2
+      },
+      {
+        "nl": "Dat is een knappe oplossing.",
+        "en": "That's a clever solution.",
+        "level": 3
+      },
+      {
+        "nl": "De knappe prins redde de prinses.",
+        "en": "The handsome prince saved the princess.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "aangenaam",
+    "meaning": "pleasant/nice to meet",
+    "group": "bijvoeglijk",
+    "nl": "Het weer is aangenaam.",
+    "en": "The weather is pleasant.",
+    "blank": "Het weer is ___.",
+    "answer": "aangenaam",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Aangenaam, ik ben Tom.",
+        "en": "Nice to meet you, I'm Tom.",
+        "level": 2
+      },
+      {
+        "nl": "Het was een aangenaam gesprek.",
+        "en": "It was a pleasant conversation.",
+        "level": 3
+      },
+      {
+        "nl": "We brachten een aangename avond door.",
+        "en": "We spent a pleasant evening.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "verbijsterd",
+    "meaning": "bewildered/astonished",
+    "group": "bijvoeglijk",
+    "nl": "Ik ben verbijsterd.",
+    "en": "I am astonished.",
+    "blank": "Ik ben ___.",
+    "answer": "verbijsterd",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Zij keek verbijsterd.",
+        "en": "She looked bewildered.",
+        "level": 2
+      },
+      {
+        "nl": "Hij was verbijsterd door het nieuws.",
+        "en": "He was astonished by the news.",
+        "level": 3
+      },
+      {
+        "nl": "De verbijsterde menigte bleef stil staan.",
+        "en": "The bewildered crowd stood still.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "zelfverzekerd",
+    "meaning": "self-confident",
+    "group": "bijvoeglijk",
+    "nl": "Zij is zelfverzekerd.",
+    "en": "She is self-confident.",
+    "blank": "Zij is ___.",
+    "answer": "zelfverzekerd",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Hij loopt zelfverzekerd binnen.",
+        "en": "He walks in confidently.",
+        "level": 2
+      },
+      {
+        "nl": "Zij gaf een zelfverzekerd antwoord.",
+        "en": "She gave a self-confident answer.",
+        "level": 3
+      },
+      {
+        "nl": "De zelfverzekerde spreker overtuigde iedereen.",
+        "en": "The self-confident speaker convinced everyone.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "gerust",
+    "meaning": "at ease/reassured",
+    "group": "bijvoeglijk",
+    "nl": "Ik ben gerust.",
+    "en": "I am at ease.",
+    "blank": "Ik ben ___.",
+    "answer": "gerust",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Wees maar gerust.",
+        "en": "Don't worry.",
+        "level": 2
+      },
+      {
+        "nl": "Nu ben ik weer gerust.",
+        "en": "Now I'm reassured again.",
+        "level": 3
+      },
+      {
+        "nl": "Met een gerust hart ging zij slapen.",
+        "en": "With a calm heart she went to sleep.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "breekbaar",
+    "meaning": "fragile/breakable",
+    "group": "bijvoeglijk",
+    "nl": "Het glas is breekbaar.",
+    "en": "The glass is fragile.",
+    "blank": "Het glas is ___.",
+    "answer": "breekbaar",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Dit pakket is breekbaar.",
+        "en": "This parcel is fragile.",
+        "level": 2
+      },
+      {
+        "nl": "Pas op met de breekbare vaas.",
+        "en": "Be careful with the fragile vase.",
+        "level": 3
+      },
+      {
+        "nl": "De breekbare kopjes staan in de kast.",
+        "en": "The fragile cups are in the cupboard.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "bewusteloos",
+    "meaning": "unconscious",
+    "group": "bijvoeglijk",
+    "nl": "Hij is bewusteloos.",
+    "en": "He is unconscious.",
+    "blank": "Hij is ___.",
+    "answer": "bewusteloos",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Zij viel bewusteloos neer.",
+        "en": "She fell down unconscious.",
+        "level": 2
+      },
+      {
+        "nl": "De man lag bewusteloos op de grond.",
+        "en": "The man lay unconscious on the ground.",
+        "level": 3
+      },
+      {
+        "nl": "Het bewusteloze slachtoffer werd weggedragen.",
+        "en": "The unconscious victim was carried away.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "zwart",
+    "meaning": "black",
+    "group": "bijvoeglijk",
+    "nl": "De kat is zwart.",
+    "en": "The cat is black.",
+    "blank": "De kat is ___.",
+    "answer": "zwart",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Ik draag een zwarte hoed.",
+        "en": "I wear a black hat.",
+        "level": 2
+      },
+      {
+        "nl": "De lucht werd helemaal zwart.",
+        "en": "The sky turned completely black.",
+        "level": 3
+      },
+      {
+        "nl": "Zij heeft lang zwart haar.",
+        "en": "She has long black hair.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "leuk",
+    "meaning": "nice/fun",
+    "group": "bijvoeglijk",
+    "nl": "Het is leuk.",
+    "en": "It is fun.",
+    "blank": "Het is ___.",
+    "answer": "leuk",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Wat een leuk feest.",
+        "en": "What a fun party.",
+        "level": 2
+      },
+      {
+        "nl": "Zij is een leuke vrouw.",
+        "en": "She is a nice woman.",
+        "level": 3
+      },
+      {
+        "nl": "We hadden een heel leuke dag samen.",
+        "en": "We had a really nice day together.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "dik",
+    "meaning": "fat/thick",
+    "group": "bijvoeglijk",
+    "nl": "Het boek is dik.",
+    "en": "The book is thick.",
+    "blank": "Het boek is ___.",
+    "answer": "dik",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De kat is te dik.",
+        "en": "The cat is too fat.",
+        "level": 2
+      },
+      {
+        "nl": "Ik draag een dikke jas.",
+        "en": "I wear a thick coat.",
+        "level": 3
+      },
+      {
+        "nl": "Er lag een dikke laag sneeuw.",
+        "en": "There was a thick layer of snow.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "grappig",
+    "meaning": "funny",
+    "group": "bijvoeglijk",
+    "nl": "Hij is grappig.",
+    "en": "He is funny.",
+    "blank": "Hij is ___.",
+    "answer": "grappig",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Dat is een grappig verhaal.",
+        "en": "That's a funny story.",
+        "level": 2
+      },
+      {
+        "nl": "Zij vertelde een grappige grap.",
+        "en": "She told a funny joke.",
+        "level": 3
+      },
+      {
+        "nl": "De grappige clown liet iedereen lachen.",
+        "en": "The funny clown made everyone laugh.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "krachtig",
+    "meaning": "powerful/forceful",
+    "group": "bijvoeglijk",
+    "nl": "De motor is krachtig.",
+    "en": "The engine is powerful.",
+    "blank": "De motor is ___.",
+    "answer": "krachtig",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Hij gaf een krachtig antwoord.",
+        "en": "He gave a forceful answer.",
+        "level": 2
+      },
+      {
+        "nl": "Het was een krachtige klap.",
+        "en": "It was a powerful blow.",
+        "level": 3
+      },
+      {
+        "nl": "Met een krachtige stem sprak zij de zaal toe.",
+        "en": "With a powerful voice she addressed the hall.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "eindelijk",
+    "meaning": "finally",
+    "group": "functiewoord",
+    "nl": "Ik ben er eindelijk.",
+    "en": "I'm finally here.",
+    "blank": "Ik ben er ___.",
+    "answer": "eindelijk",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Eindelijk is het weekend.",
+        "en": "Finally it's the weekend.",
+        "level": 2
+      },
+      {
+        "nl": "Hij kwam eindelijk thuis.",
+        "en": "He finally came home.",
+        "level": 3
+      },
+      {
+        "nl": "Na uren wachten kwam de trein eindelijk aan.",
+        "en": "After hours of waiting the train finally arrived.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "reeds",
+    "meaning": "already (formal)",
+    "group": "functiewoord",
+    "nl": "Hij is reeds weg.",
+    "en": "He has already left.",
+    "blank": "Hij is ___ weg.",
+    "answer": "reeds",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "De winkel is reeds gesloten.",
+        "en": "The shop is already closed.",
+        "level": 2
+      },
+      {
+        "nl": "Zij had het antwoord reeds geraden.",
+        "en": "She had already guessed the answer.",
+        "level": 3
+      },
+      {
+        "nl": "De gasten waren reeds vertrokken toen wij aankwamen.",
+        "en": "The guests had already left when we arrived.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "meestal",
+    "meaning": "usually/mostly",
+    "group": "functiewoord",
+    "nl": "Ik werk meestal thuis.",
+    "en": "I usually work at home.",
+    "blank": "Ik werk ___ thuis.",
+    "answer": "meestal",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Zij komt meestal te laat.",
+        "en": "She is usually late.",
+        "level": 2
+      },
+      {
+        "nl": "We eten meestal om zeven uur.",
+        "en": "We usually eat at seven o'clock.",
+        "level": 3
+      },
+      {
+        "nl": "In de zomer gaan we meestal naar het strand.",
+        "en": "In summer we usually go to the beach.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "gelijk",
+    "meaning": "at once / right (correct)",
+    "group": "functiewoord",
+    "nl": "Je hebt gelijk.",
+    "en": "You are right.",
+    "blank": "Je hebt ___.",
+    "answer": "gelijk",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Ik kom er gelijk aan.",
+        "en": "I'm coming right away.",
+        "level": 2
+      },
+      {
+        "nl": "Hij had gelijk over het weer.",
+        "en": "He was right about the weather.",
+        "level": 3
+      },
+      {
+        "nl": "Zij begon gelijk te huilen toen ze het hoorde.",
+        "en": "She started crying at once when she heard it.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "vanaf",
+    "meaning": "from (starting point)",
+    "group": "functiewoord",
+    "nl": "Ik werk vanaf negen uur.",
+    "en": "I work from nine o'clock.",
+    "blank": "Ik werk ___ negen uur.",
+    "answer": "vanaf",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Vanaf hier is het dichtbij.",
+        "en": "From here it's close.",
+        "level": 2
+      },
+      {
+        "nl": "De winkel is open vanaf maandag.",
+        "en": "The shop is open from Monday.",
+        "level": 3
+      },
+      {
+        "nl": "Vanaf de top kun je de hele stad zien.",
+        "en": "From the top you can see the whole city.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "veruit",
+    "meaning": "by far",
+    "group": "functiewoord",
+    "nl": "Hij is veruit de beste.",
+    "en": "He is by far the best.",
+    "blank": "Hij is ___ de beste.",
+    "answer": "veruit",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Dit is veruit de mooiste.",
+        "en": "This is by far the most beautiful.",
+        "level": 2
+      },
+      {
+        "nl": "Zij verdient veruit het meeste.",
+        "en": "She earns by far the most.",
+        "level": 3
+      },
+      {
+        "nl": "Deze film is veruit de grappigste van het jaar.",
+        "en": "This movie is by far the funniest of the year.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "overeind",
+    "meaning": "upright",
+    "group": "functiewoord",
+    "nl": "Ik sta overeind.",
+    "en": "I stand upright.",
+    "blank": "Ik sta ___.",
+    "answer": "overeind",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Zij komt langzaam overeind.",
+        "en": "She slowly gets up.",
+        "level": 2
+      },
+      {
+        "nl": "Hij hielp de oude man overeind.",
+        "en": "He helped the old man up.",
+        "level": 3
+      },
+      {
+        "nl": "Na de val kwam de hond weer overeind.",
+        "en": "After the fall the dog got back on its feet.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "boven",
+    "meaning": "above / on top",
+    "group": "functiewoord",
+    "nl": "De lamp hangt boven.",
+    "en": "The lamp hangs above.",
+    "blank": "De lamp hangt ___.",
+    "answer": "boven",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Zij woont boven ons.",
+        "en": "She lives above us.",
+        "level": 2
+      },
+      {
+        "nl": "De vogel vliegt hoog boven de bomen.",
+        "en": "The bird flies high above the trees.",
+        "level": 3
+      },
+      {
+        "nl": "Boven op de berg lag veel sneeuw.",
+        "en": "On top of the mountain there was a lot of snow.",
+        "level": 4
+      }
+    ]
+  },
+  {
+    "term": "voorbij",
+    "meaning": "past / by / over",
+    "group": "functiewoord",
+    "nl": "De zomer is voorbij.",
+    "en": "The summer is over.",
+    "blank": "De zomer is ___.",
+    "answer": "voorbij",
+    "level": 1,
+    "sentences": [
+      {
+        "nl": "Hij loopt mij voorbij.",
+        "en": "He walks past me.",
+        "level": 2
+      },
+      {
+        "nl": "De trein reed het station voorbij.",
+        "en": "The train went past the station.",
+        "level": 3
+      },
+      {
+        "nl": "Toen de storm voorbij was, gingen we naar buiten.",
+        "en": "When the storm was over, we went outside.",
+        "level": 4
+      }
+    ]
+  }
+];
+      const TITLE = "Nederlands oefenen — sprookjeswoorden (deel 2)";
+
+      document.getElementById("sub").textContent = CARDS.length + " woorden";
+
+      // all example sentences across the deck (primary + extra) flattened into flashcards
+      const SENTENCES = [];
+      CARDS.forEach((c) => {
+        if (c.nl && c.en)
+          SENTENCES.push({ nl: c.nl, en: c.en, term: c.term, level: c.level });
+        (c.sentences || []).forEach((s) => {
+          if (s.nl && s.en)
+            SENTENCES.push({ nl: s.nl, en: s.en, term: c.term, level: s.level });
+        });
+      });
+
+      // ---- mode definitions ----
+      // each mode declares which cards it can use, and how to render one
+      const MODES = {
+        flashcards: { label: "Kaarten NL → EN", usable: () => CARDS },
+        flashcardsEN: { label: "Kaarten EN → NL", usable: () => CARDS },
+        choice: {
+          label: "Meerkeuze EN → NL",
+          usable: () => CARDS,
+          needs: 4,
+        },
+        choiceEN: {
+          label: "Meerkeuze NL → EN",
+          usable: () => CARDS,
+          needs: 4,
+        },
+        type: { label: "Vertaling typen", usable: () => CARDS },
+        builder: {
+          label: "Zin bouwen",
+          usable: () =>
+            CARDS.filter((c) => c.nl && c.nl.trim().split(/\s+/).length > 1),
+        },
+        review: { label: "Automatisch oefenen (handsfree)", usable: () => CARDS },
+        recall: {
+          label: "Zinnen herhalen (handsfree)",
+          usable: () => SENTENCES,
+        },
+      };
+
+      let mode = "flashcards";
+      let deck = [];
+      let i = 0;
+      let correct = 0,
+        seen = 0;
+      let answered = false;
+      let currentAudio = "";
+
+      // multiple-choice retry state
+      let total = 0; // unique cards in this round
+      let solved = new Set(); // cards answered correctly
+      let attempts = new Map(); // card -> tries taken so far
+      let lastSolved = false; // was the current card just answered correctly
+
+      // hands-free auto-review state
+      let reviewQueue = []; // flat list of { card, text, kind, en }
+      let reviewPos = 0;
+      let reviewPlaying = false;
+      let reviewTimer = null;
+      let reviewRepeat = 1; // how many times each item is spoken in a row
+      const REVIEW_GAP = 4500; // base pause (ms) after each utterance ends
+
+      // hands-free sentence-recall state (EN prompt -> attempt -> hear NL -> repeat)
+      let recallQueue = []; // shuffled list of { nl, en }
+      let recallPos = 0;
+      let recallPhase = "en"; // "en" = showing English, "nl" = Dutch shown/spoken
+      let recallPace = 1; // multiplier on the think/repeat pauses
+      let recallSessions = []; // sentences split into levels: one per word, easy->hard
+      // A batch is a slice of whatever pool you picked (a deck, or one recall
+      // level). null = no batching, which is what "alles" selects and how both
+      // modes behaved before: loop the pool forever, no done panel.
+      let batch = null; // { groups, idx, restart(items) }
+
+      // Clean round on a batch: stop instead of silently restarting, say which
+      // group finished, and offer the next one.
+      function showBatchDone() {
+        stopReview();
+        const last = batch.idx + 1 >= batch.groups.length;
+        stage.innerHTML =
+          '<div class="label">Groep ' + (batch.idx + 1) + " van " +
+          batch.groups.length + ' klaar</div>' +
+          '<div class="prompt" style="font-size:1.15rem">' +
+          (last ? "Alle groepen klaar. Sterk!" : "Geen fouten. Door naar de volgende groep?") +
+          "</div>" +
+          '<div class="choices" id="batch-done"></div>';
+        const box = document.getElementById("batch-done");
+        if (!last) {
+          const nxt = document.createElement("button");
+          nxt.textContent = "Volgende " + batch.groups[batch.idx + 1].length + " \u2192";
+          nxt.onclick = () => {
+            batch.idx++;
+            batch.restart(batch.groups[batch.idx]);
+          };
+          box.appendChild(nxt);
+        }
+        const back = document.createElement("button");
+        back.textContent = "Terug";
+        back.onclick = () => { batch = null; render(); };
+        box.appendChild(back);
+      }
+      let recallSessionIdx = 0; // which level is currently being drilled
+      let recallMistakes = new Set(); // sentences flagged to repeat; drill only these until cleared
+
+      // hands-free EN->NL flashcard state (EN meaning -> attempt -> hear NL word -> repeat)
+      let flashENQueue = []; // shuffled list of cards
+      let flashENPos = 0;
+      let flashENPhase = "en"; // "en" = showing English, "nl" = Dutch shown/spoken
+      let flashENPace = 1; // multiplier on the think/repeat pauses
+      let flashENMistakes = new Set(); // cards gemarkeerd om te herhalen; bubble to front each round
+
+      const stage = document.getElementById("stage");
+      const feedback = document.getElementById("feedback");
+      const scoreEl = document.getElementById("score");
+
+      function shuffleArr(a) {
+        a = a.slice();
+        for (let k = a.length - 1; k > 0; k--) {
+          const j = Math.floor(Math.random() * (k + 1));
+          [a[k], a[j]] = [a[j], a[k]];
+        }
+        return a;
+      }
+
+      function buildModeButtons() {
+        const wrap = document.getElementById("modes");
+        wrap.innerHTML = "";
+        Object.entries(MODES).forEach(([key, def]) => {
+          const pool = def.usable();
+          const enough =
+            pool.length > 0 && (!def.needs || pool.length >= def.needs);
+          const btn = document.createElement("button");
+          btn.textContent = def.label;
+          btn.disabled = !enough;
+          if (key === mode) btn.classList.add("active");
+          btn.onclick = () => {
+            mode = key;
+            startMode();
+            document
+              .querySelectorAll("#modes button")
+              .forEach((b) => b.classList.toggle("active", b === btn));
+          };
+          wrap.appendChild(btn);
+        });
+      }
+
+      function startMode() {
+        stopReview(); // tear down any running auto-review before switching
+        deck = shuffleArr(MODES[mode].usable());
+        i = 0;
+        correct = 0;
+        seen = 0;
+        total = deck.length;
+        solved = new Set();
+        attempts = new Map();
+        lastSolved = false;
+        render();
+      }
+
+      // modes that re-queue wrong answers and end with a results summary
+      function isRetry() {
+        return mode === "choice" || mode === "choiceEN" || mode === "type";
+      }
+
+      function setAudio(text) {
+        currentAudio = text || "";
+      }
+
+      function speak(text) {
+        const t = typeof text === "string" && text ? text : currentAudio;
+        if (!t || !window.speechSynthesis) return;
+        const u = new SpeechSynthesisUtterance(t);
+        u.lang = "nl-BE";
+        u.rate = 0.8;
+        const _nlVoices = speechSynthesis.getVoices();
+        // Prefer a Flemish (Belgian) voice; fall back to any Dutch voice.
+        const v =
+          _nlVoices.find((x) => x.lang && x.lang.toLowerCase().startsWith("nl-be")) ||
+          _nlVoices.find((x) => x.lang && x.lang.toLowerCase().startsWith("nl"));
+        if (v) u.voice = v;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(u);
+      }
+
+      // short bright beep when a new EN -> NL prompt appears, so you can glance
+      // away while saying the Dutch and still be cued to the next card.
+      // Web Audio only: no sound file, no network.
+      let pingCtx = null;
+      function ping() {
+        try {
+          if (!pingCtx)
+            pingCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (pingCtx.state === "suspended") pingCtx.resume();
+          const t = pingCtx.currentTime;
+          const osc = pingCtx.createOscillator();
+          const gain = pingCtx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(880, t);
+          gain.gain.setValueAtTime(0.0001, t);
+          gain.gain.exponentialRampToValueAtTime(0.3, t + 0.01);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.25);
+          osc.connect(gain).connect(pingCtx.destination);
+          osc.start(t);
+          osc.stop(t + 0.26);
+        } catch (e) {}
+      }
+
+      function updateScore() {
+        if (isRetry()) {
+          scoreEl.textContent = solved.size + " / " + total + " opgelost";
+          return;
+        }
+        scoreEl.textContent = seen
+          ? correct + " / " + seen + " goed"
+          : i + 1 + " / " + deck.length;
+      }
+
+      function markResult(ok) {
+        if (answered) return;
+        answered = true;
+        seen++;
+        if (ok) correct++;
+        updateScore();
+      }
+
+      function render() {
+        answered = false;
+        feedback.textContent = "";
+        feedback.className = "feedback";
+        const c = deck[i];
+        setAudio(
+          mode === "flashcards" || isRetry() ? withArt(c) : c.nl || withArt(c),
+        );
+
+        if (mode === "flashcards") return renderFlash(c);
+        if (mode === "flashcardsEN") return renderFlashEN();
+        if (mode === "choice" || mode === "choiceEN") return renderChoice(c);
+        if (mode === "type") return renderType(c);
+        if (mode === "builder") return renderBuilder(c);
+        if (mode === "review") return renderReview();
+        if (mode === "recall") return renderRecall();
+      }
+
+      function renderFlash(c) {
+        stage.innerHTML =
+          '<div class="flip" id="flip"><div class="inner">' +
+          '<div class="face front"><div class="verb">' +
+          esc(withArt(c)) +
+          "</div>" +
+          formsHTML(c) +
+          '<div class="tap">tik om te draaien</div></div>' +
+          '<div class="face back"><div class="prompt">' +
+          esc(c.meaning || "") +
+          "</div>" +
+          exampleHTML(c) +
+          '<div class="tap">tik om te draaien</div></div>' +
+          "</div></div>";
+        const flip = document.getElementById("flip");
+        flip.onclick = () => flip.classList.toggle("flipped");
+        updateScore();
+      }
+
+      // hands-free EN -> NL flashcards: see the English, say the Dutch,
+      // then hear the Dutch word and repeat it. Mirrors sentence recall.
+      function renderFlashEN() {
+        stopReview();
+        batch = null;
+        flashENPool = null;
+        stage.classList.remove("immersive");
+        document.body.classList.remove("immersive");
+        stage.innerHTML =
+          '<div class="label">Kaarten EN → NL</div>' +
+          '<div class="prompt" style="font-size:1.15rem">Lees het Engels, zeg het in het Nederlands, luister en herhaal.</div>' +
+          '<div class="choices" id="fen-setup"></div>';
+        const box = document.getElementById("fen-setup");
+        [
+          ["Normaal tempo", 1],
+          ["Meer denktijd", 1.7],
+        ].forEach(([txt, mult]) => {
+          const b = document.createElement("button");
+          b.textContent = txt;
+          if (mult === flashENPace) b.classList.add("active");
+          b.onclick = () => {
+            flashENPace = mult;
+            box.querySelectorAll("button").forEach((x) => x.classList.toggle("active", x === b));
+          };
+          box.appendChild(b);
+        });
+        // then pick how many at a time; js/batch.js owns the split
+        const picker = document.createElement("div");
+        picker.className = "choices";
+        stage.appendChild(picker);
+        Batch.buildPicker(picker, MODES.flashcardsEN.usable(), {
+          classes: { sizeBar: "batch-sizes", size: "batch-size", sizeOn: "on",
+                     row: "batch-row", head: "batch-head" },
+          onPick: (items, i, groups) => {
+            batch = groups.length > 1
+              ? { groups: groups, idx: i, restart: startFlashENPlayback }
+              : null;
+            startFlashENPlayback(items);
+          },
+        });
+      }
+
+      // build the next round. you carry forward ONLY the cards you marked wrong
+      // this round; anything left unmarked counts as learned and drops out.
+      // each new round starts unmarked, so you can mark again whatever is still
+      // wrong and keep looping until a clean round, then the full deck.
+      let flashENPool = null; // the group being drilled, or null for the deck
+
+      function buildFlashENQueue() {
+        const all = flashENPool || MODES.flashcardsEN.usable();
+        const miss = all.filter((c) => flashENMistakes.has(c));
+        flashENMistakes = new Set();
+        return shuffleArr(miss.length ? miss : all);
+      }
+
+      function startFlashENPlayback(items) {
+        if (items) flashENPool = items;
+        flashENMistakes = new Set();
+        flashENQueue = buildFlashENQueue();
+        flashENPos = 0;
+        document.body.classList.add("immersive");
+        stage.classList.add("immersive");
+        stage.innerHTML =
+          '<button class="rev-exit" id="fen-exit">Sluiten</button>' +
+          '<div class="label" id="fen-label"></div>' +
+          '<div class="prompt rev-big" id="fen-text"></div>' +
+          '<div class="example rev-ex" id="fen-sub"></div>' +
+          '<div class="rev-controls">' +
+          '<button class="restart mistake" id="fen-mistake">Markeer fout</button>' +
+          '<button class="restart" id="fen-toggle">Pauze</button>' +
+          '<span class="fen-count" id="fen-count"></span></div>' +
+          '<div class="rev-progress"><span id="fen-bar"></span></div>';
+        document.getElementById("fen-toggle").onclick = toggleFlashEN;
+        document.getElementById("fen-exit").onclick = exitImmersive;
+        document.getElementById("fen-mistake").onclick = markFlashENMistake;
+        // tap anywhere (except a button) to pause / resume
+        stage.onclick = (e) => {
+          if (!e.target.closest("button")) toggleFlashEN();
+        };
+        enterFullscreen();
+        reviewPlaying = true;
+        flashENShowEnglish();
+      }
+
+      // phase 1: English meaning on screen, silent pause to attempt the Dutch
+      function flashENShowEnglish() {
+        const c = flashENQueue[flashENPos];
+        if (!c) return;
+        flashENPhase = "en";
+        const labelEl = document.getElementById("fen-label");
+        if (!labelEl) return; // left the mode
+        document.getElementById("fen-text").innerHTML =
+          '<div class="sentence">' + esc(c.meaning || c.en || "") + "</div>";
+        document.getElementById("fen-sub").innerHTML = "";
+        labelEl.textContent = "Zeg het in het Nederlands…";
+        scoreEl.textContent = flashENPos + 1 + " / " + flashENQueue.length;
+        refreshFlashENProgress();
+        if (reviewPlaying) ping();
+        if (!reviewPlaying) return;
+        clearTimeout(reviewTimer);
+        const think = (2500 + c.term.length * 120) * flashENPace;
+        reviewTimer = setTimeout(flashENRevealDutch, think);
+      }
+
+      // phase 2: flip to the Dutch word, speak it, then pause to repeat aloud
+      function flashENRevealDutch() {
+        const c = flashENQueue[flashENPos];
+        if (!c) return;
+        flashENPhase = "nl";
+        const labelEl = document.getElementById("fen-label");
+        if (!labelEl) return;
+        document.getElementById("fen-text").innerHTML =
+          '<div class="' + bigCls(withArt(c)) + '">' +
+          esc(withArt(c)) +
+          "</div>" +
+          formsHTML(c);
+        document.getElementById("fen-sub").innerHTML = c.meaning
+          ? '<div class="en" style="font-size:clamp(1rem,3vw,1.8rem)">' +
+            esc(c.meaning) +
+            "</div>"
+          : "";
+        labelEl.textContent = "Herhaal nu…";
+        setAudio(withArt(c));
+        const repeatPause = (REVIEW_GAP + c.term.length * 150) * flashENPace;
+        clearTimeout(reviewTimer);
+        if (!reviewPlaying || !window.speechSynthesis) {
+          reviewTimer = setTimeout(flashENAdvance, repeatPause);
+          return;
+        }
+        const u = new SpeechSynthesisUtterance(withArt(c));
+        u.lang = "nl-BE";
+        u.rate = 0.8;
+        const _nlVoices = speechSynthesis.getVoices();
+        // Prefer a Flemish (Belgian) voice; fall back to any Dutch voice.
+        const v =
+          _nlVoices.find((x) => x.lang && x.lang.toLowerCase().startsWith("nl-be")) ||
+          _nlVoices.find((x) => x.lang && x.lang.toLowerCase().startsWith("nl"));
+        if (v) u.voice = v;
+        u.onend = () => {
+          if (!reviewPlaying) return;
+          clearTimeout(reviewTimer);
+          reviewTimer = setTimeout(flashENAdvance, repeatPause);
+        };
+        speechSynthesis.cancel();
+        speechSynthesis.speak(u);
+        // watchdog: advance even if onend never fires
+        reviewTimer = setTimeout(flashENAdvance, repeatPause + 6000);
+      }
+
+      function flashENAdvance() {
+        clearTimeout(reviewTimer);
+        flashENPos++;
+        if (flashENPos >= flashENQueue.length) {
+          // a batch stops on a clean round so you can move to the next group;
+          // an unbatched deck keeps looping exactly as before
+          if (batch && !flashENMistakes.size) return showBatchDone();
+          flashENPos = 0;
+          flashENQueue = buildFlashENQueue();
+        }
+        flashENShowEnglish();
+      }
+
+      // update the progress bar, mistake-count text, and the mistake button's
+      // marked/unmarked state for the card currently on screen
+      function refreshFlashENProgress() {
+        const bar = document.getElementById("fen-bar");
+        if (bar)
+          bar.style.width =
+            ((flashENPos + 1) / flashENQueue.length) * 100 + "%";
+        const count = document.getElementById("fen-count");
+        if (count)
+          count.textContent = flashENMistakes.size
+            ? flashENMistakes.size + " gemarkeerd om te herhalen"
+            : "";
+        const c = flashENQueue[flashENPos];
+        const btn = document.getElementById("fen-mistake");
+        if (btn && c) {
+          const marked = flashENMistakes.has(c);
+          btn.textContent = marked ? "Gemarkeerd" : "Markeer fout";
+          btn.classList.toggle("marked", marked);
+        }
+      }
+
+      // flag (or unflag) the current card; flagged cards lead the next round
+      function markFlashENMistake() {
+        const c = flashENQueue[flashENPos];
+        if (!c) return;
+        if (flashENMistakes.has(c)) flashENMistakes.delete(c);
+        else flashENMistakes.add(c);
+        refreshFlashENProgress();
+      }
+
+      function toggleFlashEN() {
+        const btn = document.getElementById("fen-toggle");
+        if (reviewPlaying) {
+          stopReview();
+          if (btn) btn.textContent = "Hervatten";
+        } else {
+          reviewPlaying = true;
+          if (btn) btn.textContent = "Pauze";
+          if (flashENPhase === "nl") flashENRevealDutch();
+          else flashENShowEnglish();
+        }
+      }
+
+      function renderChoice(c) {
+        const toEN = mode === "choiceEN"; // prompt Dutch, choose English
+        const valOf = (x) => (toEN ? x.meaning || x.en || "" : withArt(x));
+        const target = valOf(c);
+        const others = shuffleArr(
+          CARDS.filter((x) => x !== c && valOf(x) !== target),
+        ).slice(0, 3);
+        const opts = shuffleArr([c, ...others]);
+        stage.innerHTML =
+          '<div class="label">' +
+          (toEN ? "Wat betekent dit" : "Wat is het Nederlands voor") +
+          "</div>" +
+          '<div class="prompt">' +
+          esc(toEN ? withArt(c) : c.meaning || c.en || "") +
+          "</div>" +
+          '<div class="choices" id="choices"></div>' +
+          '<div class="example" id="example"></div>';
+        const box = document.getElementById("choices");
+        opts.forEach((o) => {
+          const b = document.createElement("button");
+          b.textContent = valOf(o);
+          b.onclick = () => {
+            if (answered) return;
+            const ok = valOf(o) === target;
+            const n = recordRetry(c, ok);
+            b.classList.add(ok ? "correct" : "wrong");
+            if (!ok)
+              [...box.children]
+                .find((x) => x.textContent === target)
+                ?.classList.add("correct");
+            [...box.children].forEach((x) => (x.disabled = true));
+            feedback.textContent = ok
+              ? n === 1
+                ? "Goed, in één keer!"
+                : "Goed bij poging " + n + "!"
+              : "Antwoord: " + target + ". Je ziet het later opnieuw.";
+            feedback.className = "feedback " + (ok ? "good" : "bad");
+            revealExample(c);
+          };
+          box.appendChild(b);
+        });
+        updateScore();
+      }
+
+      function renderType(c) {
+        stage.innerHTML =
+          '<div class="label">Typ het Nederlands voor</div>' +
+          '<div class="prompt">' +
+          esc(c.meaning || c.en || "") +
+          "</div>" +
+          '<input type="text" id="answer" autocomplete="off" autocapitalize="off" placeholder="typ hier, dan Enter">' +
+          '<div class="example" id="example"></div>';
+        const inp = document.getElementById("answer");
+        inp.focus();
+        inp.addEventListener("keydown", (e) => {
+          if (e.key !== "Enter" || answered) return;
+          e.stopPropagation();
+          const ok =
+            norm(inp.value) === norm(c.term) ||
+            norm(inp.value) === norm(withArt(c));
+          const n = recordRetry(c, ok);
+          inp.classList.add(ok ? "correct" : "wrong");
+          inp.disabled = true;
+          feedback.textContent = ok
+            ? n === 1
+              ? "Goed, in één keer!"
+              : "Goed bij poging " + n + "!"
+            : "Antwoord: " + withArt(c) + ". Je ziet het later opnieuw.";
+          feedback.className = "feedback " + (ok ? "good" : "bad");
+          revealExample(c);
+        });
+        updateScore();
+      }
+
+      function renderBuilder(c) {
+        const words = c.nl.replace(/\s+/g, " ").trim().split(" ");
+        const scrambled = shuffleArr(words);
+        stage.innerHTML =
+          '<div class="label">Bouw de zin</div>' +
+          (c.en
+            ? '<div class="prompt"><small>' + esc(c.en) + "</small></div>"
+            : "") +
+          '<div class="answer-zone" id="zone"></div>' +
+          '<div class="bank" id="bank"></div>';
+        const zone = document.getElementById("zone");
+        const bank = document.getElementById("bank");
+        scrambled.forEach((w) => {
+          const t = document.createElement("span");
+          t.className = "tok";
+          t.textContent = w;
+          t.onclick = () => {
+            if (answered) return;
+            (t.parentElement === bank ? zone : bank).appendChild(t);
+            const built = [...zone.children]
+              .map((x) => x.textContent)
+              .join(" ");
+            if (built === words.join(" ")) {
+              markResult(true);
+              feedback.textContent = "Goed!";
+              feedback.className = "feedback good";
+              [...zone.children].forEach((x) => (x.onclick = null));
+            }
+          };
+          bank.appendChild(t);
+        });
+        feedback.innerHTML =
+          '<span class="reveal">tik de woorden in volgorde; tik nog eens om te verwijderen</span>';
+        updateScore();
+      }
+
+      function norm(s) {
+        return (s || "")
+          .toLowerCase()
+          .replace(/[.,!?;:]/g, "")
+          .replace(/\s+/g, " ")
+          .trim();
+      }
+      // A card embeds only its participle. The rest of a verb's principal parts
+      // (ik-form, jij/hij-form, simple past, auxiliary) live in data/vocab.js
+      // keyed by the same term, so look them up rather than duplicating them
+      // into every generated page. Falls back to the embedded participle when
+      // the term is unknown or the projection was not loaded.
+      var VERB_BY_TERM = (function () {
+        var m = {};
+        if (typeof VOCAB !== "undefined") {
+          VOCAB.forEach(function (w) { if (w.k === "verb") m[w.t] = w; });
+        }
+        return m;
+      })();
+
+      function formsHTML(c) {
+        var t = String((c && c.term) || "");
+        var w = VERB_BY_TERM[t] || VERB_BY_TERM[t.replace(/^zich\s+/, "")];
+        if (w && typeof VerbForms !== "undefined") {
+          return VerbForms.rows(w)
+            .map(function (r) { return '<div class="pp">' + esc(r) + "</div>"; })
+            .join("");
+        }
+        return c && c.pp ? '<div class="pp">(' + esc(c.pp) + ")</div>" : "";
+      }
+
+      function esc(s) {
+        const d = document.createElement("div");
+        d.textContent = s;
+        return d.innerHTML;
+      }
+
+      // Dutch headword with its article for nouns (art="de"/"het"), so gender
+      // is always shown and spoken with the word. Non-nouns are unchanged.
+      // Article lookup, the same shape as VERB_BY_TERM above and for the same
+      // reason: the deck is not a reliable source. Cards are supposed to carry
+      // `art` themselves, but most were authored without it, so a noun showed
+      // as "boter" with no gender anywhere -- flashcards, the hands-free EN ->
+      // NL run, and the word half of the auto-review. data/vocab.js already
+      // knows the article for every noun, so trust that over the deck.
+      var ART_BY_TERM = (function () {
+        var m = {};
+        if (typeof VOCAB !== "undefined") {
+          VOCAB.forEach(function (w) {
+            if (w.k === "noun" && w.art) m[w.t] = w.art;
+          });
+        }
+        return m;
+      })();
+
+      function withArt(c) {
+        if (!c) return "";
+        var art = c.art || ART_BY_TERM[c.term];
+        return art ? art + " " + c.term : c.term;
+      }
+
+      // "de spijker" is a headword and gets headword size. "de spijker op de
+      // kop slaan" is a phrase and would overflow the screen at that size, so
+      // it is sized as a sentence instead. Two words stay a headword, which
+      // keeps every noun ("de kast") and reflexive verb rendering as before.
+      function bigCls(text) {
+        return String(text || "").trim().split(/\s+/).length >= 3
+          ? "verb phrase"
+          : "verb";
+      }
+
+      // bigCls picks a starting size from the word count, which cannot know how
+      // WIDE a word is: "de sinaasappel" is two words, so it kept headword size
+      // and overflow-wrap chopped it into "sinaasappe" + "l". Guessing cannot
+      // fix that; measuring can. Shrink the rendered text until no word
+      // overflows its line and the block fits the height budget.
+      //
+      // overflow-wrap is forced to `normal` first so a long word OVERFLOWS
+      // instead of silently breaking -- that overflow is the signal the loop
+      // measures. break-word is restored only if we bottom out, so it stays a
+      // last resort rather than the normal path.
+      function fitBig(box) {
+        var el = box && box.querySelector(".verb, .sentence");
+        if (!el) return;
+        el.style.fontSize = "";
+        el.style.overflowWrap = "normal";
+        // Available width comes from the BOX, never from `el`: the review mode
+        // renders a <span class="verb"> and an inline element reports
+        // clientWidth 0, which silently collapsed every card to the floor size.
+        // The box is always a block, so it is the honest measure.
+        var availW = box.clientWidth || window.innerWidth;
+        var maxH = window.innerHeight * 0.5;
+        var px = parseFloat(getComputedStyle(el).fontSize) || 64;
+        var guard = 0;
+        // A range over the contents measures the TEXT, which is what has to
+        // fit. scrollWidth cannot: on a block it equals clientWidth the moment
+        // the text fits, so it can never say how much room is left, and the
+        // loop would stop flush with the last letter against the bezel.
+        var rect = function () {
+          var r = document.createRange();
+          r.selectNodeContents(el);
+          return r.getBoundingClientRect();
+        };
+        var m = rect();
+        while ((m.width > availW * 0.96 || m.height > maxH) && px > 18 && guard++ < 40) {
+          px *= 0.92;
+          el.style.fontSize = px + "px";
+          m = rect();
+        }
+        if (m.width > availW) el.style.overflowWrap = "break-word";
+      }
+
+      // Five render sites across three immersive modes write into a .rev-big,
+      // and a missed one is a silently clipped word. So watch instead of
+      // calling: any DOM change refits whatever .rev-big is on screen. Setting
+      // font-size is an attribute mutation, not childList, so this cannot
+      // retrigger itself.
+      function fitAllBig() {
+        var boxes = document.querySelectorAll(".rev-big");
+        for (var i = 0; i < boxes.length; i++) fitBig(boxes[i]);
+      }
+      new MutationObserver(fitAllBig).observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+      window.addEventListener("resize", fitAllBig);
+
+      function exampleOf(c) {
+        return c.nl ? { nl: c.nl, en: c.en } : (c.sentences || [])[0];
+      }
+      function exampleHTML(c) {
+        const ex = exampleOf(c);
+        if (!ex || !ex.nl) return "";
+        return (
+          '<div class="example"><div class="nl">' +
+          esc(ex.nl) +
+          "</div>" +
+          (ex.en ? '<div class="en">' + esc(ex.en) + "</div>" : "") +
+          "</div>"
+        );
+      }
+
+      // ---- hands-free auto-review ----
+      // Flattens the deck into a playlist of Dutch utterances: each card
+      // contributes its term followed by its example sentence(s), so a word
+      // stays grouped with its context. Plays one item, then chains to the
+      // next on the utterance's onend event (pace follows speech length),
+      // with a watchdog timer in case onend never fires.
+      function buildReviewQueue(cards) {
+        const q = [];
+        const push = (item) => {
+          for (let r = 0; r < reviewRepeat; r++) q.push(item);
+        };
+        cards.forEach((c) => {
+          if (c.term) push({ card: c, text: withArt(c), kind: "word" });
+          if (c.nl) push({ card: c, text: c.nl, kind: "sentence", en: c.en });
+          (c.sentences || []).forEach((s) => {
+            if (s.nl) push({ card: c, text: s.nl, kind: "sentence", en: s.en });
+          });
+        });
+        return q;
+      }
+
+      // setup screen: pick repeat count before going immersive (the click on
+      // these buttons is the user gesture that lets us request fullscreen)
+      function renderReview() {
+        stage.classList.remove("immersive");
+        document.body.classList.remove("immersive");
+        stage.innerHTML =
+          '<div class="label">Automatisch oefenen</div>' +
+          '<div class="prompt" style="font-size:1.2rem">Hoe wil je oefenen?</div>' +
+          '<div class="choices" id="rev-setup"></div>';
+        const box = document.getElementById("rev-setup");
+        [
+          ["Eén keer afspelen", 1],
+          ["Elk twee keer herhalen", 2],
+        ].forEach(([txt, rep]) => {
+          const b = document.createElement("button");
+          b.textContent = txt;
+          b.onclick = () => {
+            reviewRepeat = rep;
+            startReviewPlayback();
+          };
+          box.appendChild(b);
+        });
+      }
+
+      function startReviewPlayback() {
+        reviewQueue = buildReviewQueue(deck);
+        reviewPos = 0;
+        document.body.classList.add("immersive");
+        stage.classList.add("immersive");
+        stage.innerHTML =
+          '<button class="rev-exit" id="rev-exit">Sluiten</button>' +
+          '<div class="label" id="rev-label"></div>' +
+          '<div class="prompt rev-big" id="rev-word"></div>' +
+          '<div class="example rev-ex" id="rev-ex"></div>' +
+          '<div class="rev-controls">' +
+          '<button class="restart" id="rev-toggle">Pauze</button></div>' +
+          '<div class="rev-progress"><span id="rev-bar"></span></div>';
+        document.getElementById("rev-toggle").onclick = toggleReview;
+        document.getElementById("rev-exit").onclick = exitImmersive;
+        // tap anywhere (except a button) to pause / resume
+        stage.onclick = (e) => {
+          if (!e.target.closest("button")) toggleReview();
+        };
+        enterFullscreen();
+        reviewPlaying = true;
+        reviewSpeakCurrent();
+      }
+
+      function enterFullscreen() {
+        const el = document.documentElement;
+        if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+      }
+
+      // leave immersive review: stop audio, restore chrome, exit fullscreen
+      function exitImmersive() {
+        stopReview();
+        stage.onclick = null;
+        stage.classList.remove("immersive");
+        document.body.classList.remove("immersive");
+        if (document.fullscreenElement && document.exitFullscreen)
+          document.exitFullscreen().catch(() => {});
+        mode = "flashcards";
+        buildModeButtons();
+        startMode();
+      }
+
+      function renderReviewCard(item) {
+        const labelEl = document.getElementById("rev-label");
+        if (!labelEl) return; // left the review mode
+        const wordEl = document.getElementById("rev-word");
+        const exEl = document.getElementById("rev-ex");
+        const c = item.card;
+        if (item.kind === "word") {
+          labelEl.textContent = "Woord";
+          wordEl.innerHTML =
+            '<span class="' + bigCls(item.text) + '">' +
+            esc(item.text) +
+            "</span>" +
+            formsHTML(c);
+          exEl.innerHTML = c.meaning
+            ? '<div class="en">' + esc(c.meaning) + "</div>"
+            : "";
+        } else {
+          labelEl.textContent = "Zin";
+          wordEl.innerHTML =
+            '<div class="sentence">' + esc(item.text) + "</div>";
+          exEl.innerHTML = item.en
+            ? '<div class="en">' + esc(item.en) + "</div>"
+            : "";
+        }
+        setAudio(item.text);
+        scoreEl.textContent = reviewPos + 1 + " / " + reviewQueue.length;
+        const bar = document.getElementById("rev-bar");
+        if (bar)
+          bar.style.width =
+            ((reviewPos + 1) / reviewQueue.length) * 100 + "%";
+      }
+
+      function reviewSpeakCurrent() {
+        const item = reviewQueue[reviewPos];
+        if (!item) return;
+        renderReviewCard(item);
+        if (!reviewPlaying || !window.speechSynthesis) return;
+        clearTimeout(reviewTimer);
+        const u = new SpeechSynthesisUtterance(item.text);
+        u.lang = "nl-BE";
+        u.rate = item.kind === "sentence" ? 0.6 : 0.8; // slower for sentences
+        const _nlVoices = speechSynthesis.getVoices();
+        // Prefer a Flemish (Belgian) voice; fall back to any Dutch voice.
+        const v =
+          _nlVoices.find((x) => x.lang && x.lang.toLowerCase().startsWith("nl-be")) ||
+          _nlVoices.find((x) => x.lang && x.lang.toLowerCase().startsWith("nl"));
+        if (v) u.voice = v;
+        // pause long enough to repeat the phrase aloud: base + ~speech length
+        const repeatPause = REVIEW_GAP + item.text.length * 110;
+        u.onend = () => {
+          if (!reviewPlaying) return;
+          clearTimeout(reviewTimer);
+          reviewTimer = setTimeout(reviewAdvance, repeatPause);
+        };
+        speechSynthesis.cancel();
+        speechSynthesis.speak(u);
+        // watchdog: advance even if onend is dropped; +6s covers the speech itself
+        reviewTimer = setTimeout(reviewAdvance, repeatPause + 6000);
+      }
+
+      // advance to the next item; reshuffle and loop when the queue is exhausted
+      function reviewAdvance() {
+        clearTimeout(reviewTimer);
+        reviewPos++;
+        if (reviewPos >= reviewQueue.length) {
+          reviewPos = 0;
+          deck = shuffleArr(MODES.review.usable());
+          reviewQueue = buildReviewQueue(deck);
+        }
+        reviewSpeakCurrent();
+      }
+
+      function toggleReview() {
+        const btn = document.getElementById("rev-toggle");
+        if (reviewPlaying) {
+          stopReview();
+          if (btn) btn.textContent = "Hervatten";
+        } else {
+          reviewPlaying = true;
+          if (btn) btn.textContent = "Pauze";
+          reviewSpeakCurrent();
+        }
+      }
+
+      function stopReview() {
+        reviewPlaying = false;
+        clearTimeout(reviewTimer);
+        if (window.speechSynthesis) speechSynthesis.cancel();
+      }
+
+      // ---- hands-free sentence recall ----
+      // For each sentence: show the English and pause (you say it in Dutch),
+      // then flip to the Dutch, speak it, and pause again (you repeat it).
+      // Pauses scale with sentence length; tap anywhere to pause / resume.
+      // Reuses the immersive overlay and the shared reviewPlaying/reviewTimer.
+      function renderRecall() {
+        stopReview();
+        batch = null;
+        recallPool = null;
+        stage.classList.remove("immersive");
+        document.body.classList.remove("immersive");
+        recallSessions = buildRecallSessions();
+        recallPace = 1;
+        stage.innerHTML =
+          '<div class="label">Zinnen herhalen</div>' +
+          '<div class="prompt" style="font-size:1.15rem">Kies een niveau (één zin per woord, van makkelijk naar moeilijk). Lees het Engels, zeg het in het Nederlands, luister en herhaal.</div>' +
+          '<div class="rec-pace" id="rec-pace">' +
+          '<button class="active" data-mult="1">Normaal tempo</button>' +
+          '<button data-mult="1.7">Meer denktijd</button>' +
+          "</div>" +
+          '<div class="choices" id="rec-setup"></div>';
+        // pace toggle: pick before starting a level
+        const pace = document.getElementById("rec-pace");
+        pace.querySelectorAll("button").forEach((b) => {
+          b.onclick = () => {
+            recallPace = parseFloat(b.dataset.mult);
+            pace
+              .querySelectorAll("button")
+              .forEach((x) => x.classList.toggle("active", x === b));
+          };
+        });
+        // one row per level: a start button plus a "Bekijk" button that opens
+        // a popup with that level's Dutch sentences to revise before drilling
+        const box = document.getElementById("rec-setup");
+        recallSessions.forEach((items, idx) => {
+          const row = document.createElement("div");
+          row.className = "rec-level-row";
+          const b = document.createElement("button");
+          b.className = "rec-start";
+          b.textContent = "Niveau " + (idx + 1) + " (" + items.length + ")";
+          b.onclick = () => {
+            recallSessionIdx = idx;
+            recallMistakes = new Set();
+            openRecallGroups(idx, items);
+          };
+          const rev = document.createElement("button");
+          rev.className = "rec-review";
+          rev.textContent = "Bekijk";
+          rev.onclick = () => openSentenceReview(items, idx);
+          row.appendChild(b);
+          row.appendChild(rev);
+          box.appendChild(row);
+        });
+      }
+
+      // popup: show only the Dutch sentences of a level so you can read them
+      // through before starting the hands-free drill
+      function openSentenceReview(items, idx) {
+        document.getElementById("rev-modal-title").textContent =
+          "Niveau " + (idx + 1) + ": " + items.length + " zinnen";
+        const list = document.getElementById("rev-modal-list");
+        list.innerHTML = "";
+        items.forEach((s) => {
+          const d = document.createElement("div");
+          d.className = "rev-sent";
+          const nl = document.createElement("div");
+          nl.className = "rev-sent-nl";
+          const txt = document.createElement("span");
+          txt.textContent = s.nl;
+          nl.appendChild(txt);
+          d.appendChild(nl);
+          // per-sentence toggle: reveal the English only on request
+          if (s.en) {
+            const en = document.createElement("div");
+            en.className = "rev-sent-en";
+            en.textContent = s.en;
+            en.hidden = true;
+            const tog = document.createElement("button");
+            tog.className = "rev-tr-toggle";
+            tog.textContent = "Toon vertaling";
+            tog.onclick = () => {
+              en.hidden = !en.hidden;
+              tog.textContent = en.hidden ? "Toon vertaling" : "Verberg vertaling";
+            };
+            nl.appendChild(tog);
+            d.appendChild(en);
+          }
+          list.appendChild(d);
+        });
+        document.getElementById("rev-modal").classList.add("open");
+      }
+
+      // split every recall sentence into ordered levels of <=10. when the deck
+      // authored explicit `level` numbers (newer decks), honor those boundaries.
+      // otherwise order easy->hard by sentence length and chunk into tens.
+      // Build recall levels by per-word rank: level N holds the Nth-easiest
+      // sentence of EVERY word. So level 1 is the simplest sentence for each
+      // word, level 2 the next simplest, and so on. Levels are no longer capped
+      // at 10 — a level holds about one sentence per word. Within a word, order
+      // easy -> hard by the authored `level` (if any), then by sentence length.
+      function buildRecallSessions() {
+        const all = MODES.recall.usable();
+        const byWord = new Map();
+        all.forEach((s) => {
+          const key = s.term || s.nl;
+          if (!byWord.has(key)) byWord.set(key, []);
+          byWord.get(key).push(s);
+        });
+        byWord.forEach((list) => {
+          list.sort((a, b) => {
+            const la = a.level == null ? Infinity : a.level;
+            const lb = b.level == null ? Infinity : b.level;
+            if (la !== lb) return la - lb;
+            return a.nl.length - b.nl.length;
+          });
+        });
+        // level group r gets every word's r-th easiest sentence
+        const groups = [];
+        byWord.forEach((list) => {
+          list.forEach((s, r) => {
+            (groups[r] || (groups[r] = [])).push(s);
+          });
+        });
+        return groups.filter((g) => g && g.length);
+      }
+
+      // build the next round. you carry forward ONLY the sentences you marked
+      // wrong this round; anything left unmarked counts as learned and drops
+      // out. each new round starts unmarked, so you can mark again whatever is
+      // still wrong and keep looping until a clean round, then the full level.
+      let recallPool = null; // the group being drilled, or null for the level
+
+      function buildRecallQueue() {
+        const items = recallPool || recallSessions[recallSessionIdx] || [];
+        const miss = items.filter((s) => recallMistakes.has(s));
+        recallMistakes = new Set();
+        return shuffleArr(miss.length ? miss : items);
+      }
+
+      // A level can hold one sentence per word (48, 86...). Picking a level
+      // therefore opens a second, smaller choice: how many of them at a time.
+      // The two axes compose -- level says how hard, group says how many.
+      function openRecallGroups(idx, items) {
+        stage.innerHTML =
+          '<div class="label">Niveau ' + (idx + 1) + "</div>" +
+          '<div class="prompt" style="font-size:1.15rem">' + items.length +
+          " zinnen. Hoeveel wil je er tegelijk oefenen?</div>" +
+          '<div class="choices" id="rec-groups"></div>' +
+          '<div class="choices" id="rec-back"></div>';
+        Batch.buildPicker(document.getElementById("rec-groups"), items, {
+          classes: { sizeBar: "batch-sizes", size: "batch-size",
+                     sizeOn: "on", row: "batch-row", head: "batch-head" },
+          onPick: (picked, i, groups) => {
+            batch = groups.length > 1
+              ? { groups: groups, idx: i, restart: startRecallPlayback }
+              : null;
+            startRecallPlayback(picked);
+          },
+        });
+        // Terug lives OUTSIDE the picker: buildPicker clears its host on every
+        // size change, so a button appended into it disappears on first tap.
+        const back = document.createElement("button");
+        back.textContent = "Terug";
+        back.onclick = () => { batch = null; recallPool = null; render(); };
+        document.getElementById("rec-back").appendChild(back);
+      }
+
+      function startRecallPlayback(items) {
+        if (items) recallPool = items;
+        recallMistakes = new Set();
+        recallQueue = buildRecallQueue();
+        recallPos = 0;
+        document.body.classList.add("immersive");
+        stage.classList.add("immersive");
+        stage.innerHTML =
+          '<button class="rev-exit" id="rec-exit">Sluiten</button>' +
+          '<div class="label" id="rec-label"></div>' +
+          '<div class="prompt rev-big" id="rec-text"></div>' +
+          '<div class="example rev-ex" id="rec-sub"></div>' +
+          '<div class="rev-controls">' +
+          '<button class="restart mistake" id="rec-mistake">Markeer fout</button>' +
+          '<button class="restart" id="rec-toggle">Pauze</button>' +
+          '<span class="fen-count" id="rec-count"></span></div>' +
+          '<div class="rev-progress"><span id="rec-bar"></span></div>';
+        document.getElementById("rec-toggle").onclick = toggleRecall;
+        document.getElementById("rec-mistake").onclick = markRecallMistake;
+        document.getElementById("rec-exit").onclick = exitImmersive;
+        // tap anywhere (except a button) to pause / resume
+        stage.onclick = (e) => {
+          if (!e.target.closest("button")) toggleRecall();
+        };
+        enterFullscreen();
+        reviewPlaying = true;
+        recallShowEnglish();
+      }
+
+      // phase 1: English on screen, silent pause to attempt the Dutch
+      function recallShowEnglish() {
+        const item = recallQueue[recallPos];
+        if (!item) return;
+        recallPhase = "en";
+        const labelEl = document.getElementById("rec-label");
+        if (!labelEl) return; // left the mode
+        document.getElementById("rec-text").innerHTML =
+          '<div class="sentence">' + esc(item.en) + "</div>";
+        document.getElementById("rec-sub").innerHTML = "";
+        labelEl.textContent = "Zeg het in het Nederlands…";
+        scoreEl.textContent = recallPos + 1 + " / " + recallQueue.length;
+        refreshRecallProgress();
+        if (reviewPlaying) ping();
+        if (!reviewPlaying) return;
+        clearTimeout(reviewTimer);
+        const think = (2800 + item.nl.length * 90) * recallPace + 4000;
+        reviewTimer = setTimeout(recallRevealDutch, think);
+      }
+
+      // phase 2: flip to Dutch, speak it, then pause to repeat aloud
+      function recallRevealDutch() {
+        const item = recallQueue[recallPos];
+        if (!item) return;
+        recallPhase = "nl";
+        const labelEl = document.getElementById("rec-label");
+        if (!labelEl) return;
+        document.getElementById("rec-text").innerHTML =
+          '<div class="sentence">' + esc(item.nl) + "</div>";
+        document.getElementById("rec-sub").innerHTML =
+          '<div class="en" style="font-size:clamp(1rem,3vw,1.8rem)">' +
+          esc(item.en) +
+          "</div>";
+        labelEl.textContent = "Herhaal nu…";
+        setAudio(item.nl);
+        const repeatPause = (REVIEW_GAP + item.nl.length * 110) * recallPace;
+        clearTimeout(reviewTimer);
+        if (!reviewPlaying || !window.speechSynthesis) {
+          reviewTimer = setTimeout(recallAdvance, repeatPause);
+          return;
+        }
+        const u = new SpeechSynthesisUtterance(item.nl);
+        u.lang = "nl-BE";
+        u.rate = 0.6;
+        const _nlVoices = speechSynthesis.getVoices();
+        // Prefer a Flemish (Belgian) voice; fall back to any Dutch voice.
+        const v =
+          _nlVoices.find((x) => x.lang && x.lang.toLowerCase().startsWith("nl-be")) ||
+          _nlVoices.find((x) => x.lang && x.lang.toLowerCase().startsWith("nl"));
+        if (v) u.voice = v;
+        u.onend = () => {
+          if (!reviewPlaying) return;
+          clearTimeout(reviewTimer);
+          reviewTimer = setTimeout(recallAdvance, repeatPause);
+        };
+        speechSynthesis.cancel();
+        speechSynthesis.speak(u);
+        // watchdog: advance even if onend never fires
+        reviewTimer = setTimeout(recallAdvance, repeatPause + 6000);
+      }
+
+      function recallAdvance() {
+        clearTimeout(reviewTimer);
+        recallPos++;
+        if (recallPos >= recallQueue.length) {
+          if (batch && !recallMistakes.size) return showBatchDone();
+          recallPos = 0;
+          recallQueue = buildRecallQueue();
+        }
+        recallShowEnglish();
+      }
+
+      // update the progress bar, mistake-count text, and the mistake button's
+      // marked/unmarked state for the sentence currently on screen
+      function refreshRecallProgress() {
+        const bar = document.getElementById("rec-bar");
+        if (bar)
+          bar.style.width =
+            ((recallPos + 1) / recallQueue.length) * 100 + "%";
+        const count = document.getElementById("rec-count");
+        if (count)
+          count.textContent = recallMistakes.size
+            ? recallMistakes.size + " gemarkeerd om te herhalen"
+            : "";
+        const item = recallQueue[recallPos];
+        const btn = document.getElementById("rec-mistake");
+        if (btn && item) {
+          const marked = recallMistakes.has(item);
+          btn.textContent = marked ? "Gemarkeerd" : "Markeer fout";
+          btn.classList.toggle("marked", marked);
+        }
+      }
+
+      // flag (or unflag) the current sentence; flagged ones are drilled alone
+      function markRecallMistake() {
+        const item = recallQueue[recallPos];
+        if (!item) return;
+        if (recallMistakes.has(item)) recallMistakes.delete(item);
+        else recallMistakes.add(item);
+        refreshRecallProgress();
+      }
+
+      function toggleRecall() {
+        const btn = document.getElementById("rec-toggle");
+        if (reviewPlaying) {
+          stopReview();
+          if (btn) btn.textContent = "Hervatten";
+        } else {
+          reviewPlaying = true;
+          if (btn) btn.textContent = "Pauze";
+          if (recallPhase === "nl") recallRevealDutch();
+          else recallShowEnglish();
+        }
+      }
+
+      function next() {
+        if (mode === "review") return reviewAdvance();
+        if (mode === "recall") return recallAdvance();
+        if (mode === "flashcardsEN") return flashENAdvance();
+        if (isRetry()) return retryNext();
+        i = (i + 1) % deck.length;
+        if (i === 0) deck = shuffleArr(deck);
+        render();
+      }
+
+      // retry modes advance through a queue: solved cards leave, missed cards go to the back
+      function retryNext() {
+        if (deck.length === 0) return showRetryResults();
+        if (!answered) {
+          i = (i + 1) % deck.length;
+          return render();
+        }
+        const c = deck[i];
+        deck.splice(i, 1);
+        if (!lastSolved) deck.push(c);
+        if (deck.length === 0) return showRetryResults();
+        if (i >= deck.length) i = 0;
+        render();
+      }
+
+      // shared by all retry modes: record an attempt, mark solved, update score
+      function recordRetry(c, ok) {
+        const n = (attempts.get(c) || 0) + 1;
+        attempts.set(c, n);
+        answered = true;
+        lastSolved = ok;
+        if (ok) solved.add(c);
+        updateScore();
+        return n;
+      }
+
+      function revealExample(c) {
+        const ex = exampleOf(c);
+        const el = document.getElementById("example");
+        if (el && ex && ex.nl)
+          el.innerHTML =
+            '<div class="nl">' +
+            esc(ex.nl) +
+            "</div>" +
+            (ex.en ? '<div class="en">' + esc(ex.en) + "</div>" : "");
+      }
+
+      function showRetryResults() {
+        const buckets = {};
+        const repeats = [];
+        solved.forEach((c) => {
+          const n = attempts.get(c) || 1;
+          buckets[n] = (buckets[n] || 0) + 1;
+          if (n > 1) repeats.push({ term: c.term, n });
+        });
+        const ordinal = (k) =>
+          k === 1
+            ? "Eerste keer"
+            : k === 2
+            ? "Tweede keer"
+            : k === 3
+            ? "Derde keer"
+            : k + "e keer";
+        const rows = Object.keys(buckets)
+          .map(Number)
+          .sort((a, b) => a - b)
+          .map(
+            (k) =>
+              '<div class="result-row"><span>' +
+              ordinal(k) +
+              "</span><span>" +
+              buckets[k] +
+              "</span></div>",
+          )
+          .join("");
+        repeats.sort((a, b) => b.n - a.n);
+        const list = repeats.length
+          ? '<div class="result-list"><div class="label">Meer dan één poging nodig</div>' +
+            repeats
+              .map(
+                (w) =>
+                  '<div class="result-row"><span>' +
+                  esc(w.term) +
+                  "</span><span>" +
+                  w.n +
+                  " pogingen</span></div>",
+              )
+              .join("") +
+            "</div>"
+          : '<div class="result-row" style="justify-content:center;color:var(--good)">Perfect! Elk woord in één keer.</div>';
+        stage.innerHTML =
+          '<div class="label">Ronde voltooid</div>' +
+          '<div class="prompt" style="font-size:1.15rem">' +
+          total +
+          " woorden geleerd</div>" +
+          '<div class="results">' +
+          rows +
+          "</div>" +
+          list +
+          '<div style="text-align:center;margin-top:18px"><button class="restart" id="restart">Opnieuw oefenen</button></div>';
+        document.getElementById("restart").onclick = startMode;
+        feedback.textContent = "";
+        feedback.className = "feedback";
+        scoreEl.textContent = total + " / " + total + " opgelost";
+      }
+
+      document.getElementById("next").onclick = next;
+      document.getElementById("shuffle").onclick = startMode;
+      document.getElementById("speak").onclick = speak;
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && answered) next();
+      });
+      // leaving OS fullscreen (e.g. via Esc) also tears down the immersive overlay
+      document.addEventListener("fullscreenchange", () => {
+        if (
+          !document.fullscreenElement &&
+          document.body.classList.contains("immersive")
+        )
+          exitImmersive();
+      });
+      if (window.speechSynthesis) speechSynthesis.onvoiceschanged = () => {};
+
+      // ---- vowel pronunciation helper ----
+      const VOWELS = [
+        {
+          group: "Enkele klinkers",
+          rows: [
+            { snd: "Lange A /aː/", spell: "a, aa", words: ["naam", "kaas"] },
+            { snd: "Korte A /ɑ/", spell: "a", words: ["kat", "man"] },
+            { snd: "Lange E /eː/", spell: "e, ee", words: ["zee", "nee"] },
+            { snd: "Korte E /ɛ/", spell: "e", words: ["bed", "net"] },
+            { snd: "Lange I /i/", spell: "i, ie, y", words: ["lied", "knie"] },
+            { snd: "Korte I /ɪ/", spell: "i", words: ["lip", "kin"] },
+            { snd: "Lange O /oː/", spell: "o, oo", words: ["boom", "groot"] },
+            { snd: "Korte O /ɔ/", spell: "o", words: ["pot", "bos"] },
+            { snd: "Lange U /y/", spell: "u, uu", words: ["muur", "duur"] },
+            { snd: "Korte U /ʏ/", spell: "u", words: ["put", "bus"] },
+          ],
+        },
+        {
+          group: "Klinkercombinaties",
+          rows: [
+            { snd: "OE /u/", spell: "oe", words: ["boek", "voet"] },
+            { snd: "EU /ø/", spell: "eu", words: ["neus", "deur"] },
+            { snd: "EI / IJ /ɛi/", spell: "ei, ij", words: ["reis", "wijn"] },
+            { snd: "OU /ɔu/", spell: "ou", words: ["kou", "bouw"] },
+            { snd: "AU /ɔu/", spell: "au", words: ["auto", "augustus"] },
+            { snd: "UI /œy/", spell: "ui", words: ["huis", "tuin"] },
+          ],
+        },
+        {
+          group: "Trema (aparte lettergrepen)",
+          rows: [
+            { snd: "ë", spell: "ë", words: ["reëel", "creëer"] },
+            { snd: "ï", spell: "ï", words: ["ruïne", "naïef"] },
+          ],
+        },
+      ];
+
+      function buildVowelPanel() {
+        const panel = document.getElementById("vowels");
+        let html =
+          '<h2>Klinkers</h2><p class="vowel-hint">Tik op een woord om het te horen.</p>';
+        VOWELS.forEach((g) => {
+          html += '<div class="vowel-group">' + esc(g.group) + "</div>";
+          g.rows.forEach((r) => {
+            html +=
+              '<div class="vrow"><div class="snd">' +
+              esc(r.snd) +
+              "</div>" +
+              '<div class="spell">' +
+              esc(r.spell) +
+              '</div><div class="vwords">' +
+              r.words
+                .map(
+                  (w) =>
+                    '<span class="vword" data-w="' +
+                    esc(w) +
+                    '">' +
+                    esc(w) +
+                    "</span>",
+                )
+                .join("") +
+              "</div></div>";
+          });
+        });
+        panel.innerHTML = html;
+        panel
+          .querySelectorAll(".vword")
+          .forEach((el) => (el.onclick = () => speak(el.dataset.w)));
+        document.getElementById("vtoggle").onclick = () =>
+          panel.classList.toggle("open");
+      }
+
+      // ---- theme (light / dark) ----
+      function applyTheme(t) {
+        document.documentElement.setAttribute("data-theme", t);
+        const btn = document.getElementById("ttoggle");
+        if (btn) btn.textContent = t === "dark" ? "Lichte modus" : "Donkere modus";
+      }
+      const savedTheme =
+        localStorage.getItem("nl-practice-theme") ||
+        (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light");
+      applyTheme(savedTheme);
+      document.getElementById("ttoggle").onclick = () => {
+        const next =
+          document.documentElement.getAttribute("data-theme") === "dark"
+            ? "light"
+            : "dark";
+        localStorage.setItem("nl-practice-theme", next);
+        applyTheme(next);
+      };
+
+      // sentence-review popup: close via the button or by tapping the backdrop
+      document.getElementById("rev-modal-close").onclick = () =>
+        document.getElementById("rev-modal").classList.remove("open");
+      document.getElementById("rev-modal").onclick = (e) => {
+        if (e.target.id === "rev-modal") e.currentTarget.classList.remove("open");
+      };
+
+      buildVowelPanel();
+      buildModeButtons();
+      startMode();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>waar staat het werkwoord?</title>
+    <!-- home screen + iOS: standalone launch, icon, themed status bar.
+         Paths are relative so the app works under a GitHub Pages subpath. -->
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="icon-180.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Nederlands" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f0ece3" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1c1b18" />
+    <!--
+      GENERATED PAGE. Do not edit: `python3 build_data.py` rewrites every
+      grammar-<slug>.html from this template. The lesson's content lives in
+      grammar/lessons/<slug>.json and reaches the page via data/grammar.js.
+
+      This page is deliberately thin. All drill behaviour is in js/drill.js and
+      all grammar-specific rendering in js/grammar-ui.js, so this page and the
+      grammar section of index.html cannot drift apart. The CSS below IS a copy
+      of the shared bits from index.html, matching how practice-template.html
+      already works (every generated page carries its own styles).
+    -->
+    <style>
+      :root {
+        --bg: #f0ece3;
+        --card: #fbf9f4;
+        --ink: #3b3a36;
+        --accent: #3f72a8;
+        --good: #4f9e63;
+        --bad: #c0604a;
+        --muted: #8d877b;
+        --border: #e2dccf;
+        --chip: #ece6da;
+        --chip-border: #ddd4c4;
+        --shadow: rgba(60, 50, 30, 0.07);
+      }
+      :root[data-theme="dark"] {
+        --bg: #1c1b18;
+        --card: #24231f;
+        --ink: #dcd9d0;
+        --accent: #6c9cd6;
+        --good: #5aa86f;
+        --bad: #d4715c;
+        --muted: #9a9388;
+        --border: #403e37;
+        --chip: #34332d;
+        --chip-border: #4a483f;
+        --shadow: rgba(0, 0, 0, 0.45);
+      }
+      * { box-sizing: border-box; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        margin: 0;
+        padding: 2.5rem 1.25rem 4rem;
+        display: flex;
+        justify-content: center;
+      }
+      .wrap { width: 100%; max-width: 720px; }
+      header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 0.35rem;
+      }
+      h1 { font-size: 1.7rem; margin: 0; font-weight: 700; }
+      .sub { color: var(--muted); font-size: 0.95rem; margin: 0 0 1.5rem; }
+      .back-link { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+      .back-link:hover { text-decoration: underline; }
+      .theme {
+        background: var(--chip);
+        border: 1px solid var(--chip-border);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 0.4rem 0.9rem;
+        font-size: 0.85rem;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      /* the rule block: read this before drilling */
+      .rules-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 0.4rem 1.15rem 1.15rem;
+        box-shadow: 0 2px 6px var(--shadow);
+        margin-bottom: 1.5rem;
+      }
+      /* rule -> sub-rules -> examples */
+      .rules-group {
+        margin: 1.9rem 0 0.2rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .rules-group:first-child { margin-top: 0.9rem; }
+      .rules-intro { color: var(--ink); font-size: 0.98rem; margin: 0 0 0.4rem; line-height: 1.5; }
+      .subrule {
+        border-top: 1px solid var(--border);
+        padding: 0.85rem 0 0.5rem;
+      }
+      .subrule-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+      }
+      .subrule-title { font-weight: 600; font-size: 1.02rem; }
+      .subrule-tag {
+        margin-left: 8px;
+        padding: 1px 7px;
+        border: 1px solid var(--chip-border);
+        background: var(--chip);
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 0.7rem;
+        font-weight: 600;
+        vertical-align: 1px;
+      }
+      .subrule-miss {
+        margin-left: 8px;
+        color: var(--bad);
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      .subrule-note { color: var(--muted); font-size: 0.88rem; margin: 0.2rem 0 0.55rem; line-height: 1.45; }
+      /* the unpacking: one idea per line, so a hard case can be scanned
+         instead of read. The drill never renders these. */
+      .subrule-points {
+        margin: 0.1rem 0 0.75rem;
+        padding-left: 1.1rem;
+        color: var(--ink);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+      .subrule-points li { margin-bottom: 0.28rem; }
+      .subrule-points li::marker { color: var(--accent); }
+      /* contrast block: two labelled forms on adjacent lines */
+      .compare {
+        margin: 0 0 0.6rem;
+        padding: 0.55rem 0.75rem;
+        background: var(--chip);
+        border: 1px solid var(--chip-border);
+        border-radius: 10px;
+      }
+      .compare-line { display: flex; gap: 0.6rem; align-items: baseline; padding: 1px 0; }
+      /* one box per pair, separated from the next. The rule falls only BETWEEN
+         pairs, never between the two forms of one pair, which is what makes the
+         grouping legible in a block of six near-identical lines. */
+      .compare-pair + .compare-pair {
+        border-top: 1px solid var(--muted);
+        margin-top: 0.95rem;
+        padding-top: 0.95rem;
+      }
+      .compare-label {
+        min-width: 3.6em;
+        /* a label may name a position ("in het midden"), not just a word, so it
+           wraps inside a bounded column rather than stealing sentence width */
+        max-width: 6em;
+        line-height: 1.25;
+        color: var(--accent);
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .compare-en { margin: 0.3rem 0 0.45rem 4.2em; }
+      .compare-line + .compare-en { margin-bottom: 0.2rem; }
+      .example { margin: 0 0 0.45rem; padding-left: 0.9rem; border-left: 2px solid var(--border); }
+      .example-nl { font-size: 1.02rem; }
+      .example-en { color: var(--muted); font-size: 0.9rem; margin-top: 1px; }
+      .example-en[hidden] { display: none; }
+      .rev-tr-toggle {
+        border: none;
+        background: none;
+        color: var(--accent);
+        cursor: pointer;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        padding: 0;
+      }
+
+      .start-btn {
+        width: 100%;
+        background: var(--accent);
+        color: #fff;
+        border: 1px solid var(--accent);
+        border-radius: 16px;
+        padding: 1.1rem 1.35rem;
+        font-size: 1.2rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 4px 14px var(--shadow);
+        transition: filter 0.12s ease, transform 0.08s ease;
+      }
+      .start-btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+
+      /* popup shell, shared with the picker injected by grammar-ui.js */
+      .rev-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        z-index: 40;
+      }
+      .rev-modal.open { display: flex; }
+      .rev-modal-box {
+        background: var(--card);
+        border-radius: 14px;
+        width: 100%;
+        max-width: 520px;
+        max-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px var(--shadow);
+      }
+      .rev-modal-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--border);
+      }
+      .rev-modal-head span { font-weight: 600; }
+      .rev-modal-head button {
+        border: 1px solid var(--muted);
+        background: transparent;
+        color: var(--ink);
+        border-radius: 20px;
+        padding: 5px 14px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+      .rev-modal-list { overflow-y: auto; padding: 6px 18px 18px; }
+      .set-row {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 14px;
+        margin: 10px 0;
+        cursor: pointer;
+        box-shadow: 0 2px 6px var(--shadow);
+        transition: border-color 0.12s ease;
+      }
+      .set-row:hover { border-color: var(--accent); }
+      .set-row-head { display: block; font-weight: 600; color: var(--accent); margin-bottom: 5px; }
+      .set-row-words { display: block; color: var(--muted); font-size: 0.85rem; line-height: 1.45; }
+
+      /* drill overlay, markup injected by grammar-ui.js */
+      .test-modal {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        background: var(--bg);
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 6vmin;
+        gap: 4vmin;
+        z-index: 60;
+        text-align: center;
+        overflow-y: auto;
+      }
+      .test-modal.open { display: flex; }
+      .test-exit {
+        position: fixed;
+        top: calc(18px + env(safe-area-inset-top));
+        right: 18px;
+        z-index: 70;
+        border: 1px solid var(--muted);
+        background: transparent;
+        color: var(--muted);
+        border-radius: 20px;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+      .test-title {
+        color: var(--muted);
+        font-size: clamp(1rem, 3vw, 1.6rem);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        max-width: 720px;
+      }
+      .test-setup { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+      .test-setup button {
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 10px;
+        padding: 14px 30px;
+        font-size: 1.2rem;
+        cursor: pointer;
+      }
+      .test-play {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4vmin;
+        flex: 1;
+      }
+      .test-play.show { display: flex; }
+      .test-label {
+        font-size: clamp(1rem, 3vw, 1.8rem);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .test-text { font-weight: 700; line-height: 1.1; overflow-wrap: break-word; width: 100%; }
+      .test-controls {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: calc(26px + env(safe-area-inset-bottom));
+        text-align: center;
+        z-index: 70;
+      }
+      .test-ctrl {
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 10px;
+        padding: 14px 30px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        margin: 0 6px;
+      }
+      .test-ctrl.mistake { background: var(--bad); }
+      .test-ctrl.mistake.marked { background: var(--good); }
+      .test-count { display: block; margin-top: 12px; color: var(--muted); font-size: 0.9rem; }
+      .test-progress {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 6px;
+        background: rgba(138, 132, 121, 0.25);
+        z-index: 70;
+      }
+      .test-progress span { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.3s ease; }
+
+      /* grammar card: font-size is set by Drill.fitText(), the clamps are only a
+         fallback before JS runs */
+      .test-text .g-op {
+        font-size: clamp(0.85rem, 2.4vw, 1.25rem);
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 600;
+        margin-bottom: 1.4vmin;
+      }
+      .test-text .g-front { font-weight: 600; line-height: 1.25; font-size: clamp(1.3rem, 4vw, 2.6rem); }
+      .test-text .g-wrong { color: var(--bad); }
+      .test-text .g-prompt { color: var(--ink); font-weight: 500; }
+      .test-text .g-nl { color: var(--accent); font-weight: 700; }
+      .test-text .g-opts { margin-top: 1.6vmin; font-size: clamp(1rem, 3vw, 1.6rem); color: var(--ink); }
+      /* the rule line: always present but quiet, promoted when you flag a card */
+      .test-text .g-rule {
+        margin-top: 2.4vmin;
+        font-size: clamp(0.85rem, 2.2vw, 1.1rem);
+        color: var(--muted);
+        font-weight: 400;
+        opacity: 0.7;
+      }
+      .test-text .g-rule.strong {
+        color: var(--accent);
+        opacity: 1;
+        font-size: clamp(1rem, 2.8vw, 1.4rem);
+      }
+      .test-text .g-model {
+        margin-top: 1.1vmin;
+        font-size: clamp(0.8rem, 2vw, 1.05rem);
+        color: var(--muted);
+        font-style: italic;
+      }
+
+      /* ---- sentence annotation (js/annotate.js) ---------------------------
+         Two layers grown from ONE authored string: inline marks on the loaded
+         tokens, and the tang bracket derived from those same marks. Sizes are
+         in em so the marks scale with whatever font-size the host sets,
+         including the one Drill.fitText() computes at runtime.
+         `body.no-marks` strips both layers back to plain Dutch. */
+      .tk { position: relative; padding: 0.08em 0.25em; border-radius: 0.2em; }
+      .tk-first { background: var(--chip); border: 1px solid var(--chip-border); }
+      .tk-verb { background: var(--accent); color: #fff; font-weight: 700; }
+      .tk-end { background: var(--chip); border: 1px dashed var(--muted); font-weight: 600; }
+      .tk-conj {
+        border-bottom: 0.09em solid var(--accent);
+        border-radius: 0;
+        font-weight: 700;
+        padding-bottom: 0;
+      }
+      /* the voorzetselgroep: a pill, because its whole story is that it is a
+         block that can move out of the middenstuk and stand after the verbs */
+      .tk-pp {
+        border: 1px solid var(--muted);
+        border-radius: 999px;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+      }
+      /* the scheidbaar deel: verb material that has left the verb, so it wears
+         the verb's colour without its fill. Read next to a solid .tk-verb, the
+         pair says "these two are one word" without a word of explanation. */
+      .tk-sep {
+        border: 1px dashed var(--accent);
+        color: var(--accent);
+        font-weight: 700;
+      }
+      /* te: a marker, not a verb. Present enough that its absence is visible
+         (which is the whole rule), quiet enough not to compete with the
+         infinitive it licenses. */
+      .tk-te {
+        border: 1px dotted var(--accent);
+        color: var(--accent);
+      }
+      /* the slot number floats clear of the line. Inline mode only: inside a
+         diagram the ruler underneath carries it, so it would be said twice. */
+      .tk[data-slot]::after {
+        content: attr(data-slot);
+        position: absolute;
+        left: 50%;
+        top: -1.15em;
+        transform: translateX(-50%);
+        font-size: 0.36em;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .tk-verb[data-slot]::after,
+      .tk-sep[data-slot]::after { color: var(--accent); }
+      .annot { line-height: 1.9; }
+
+      /* diagram: one grid column per token, ruler on row 2, brace on rows 3-4 */
+      .tang {
+        display: inline-grid;
+        grid-auto-rows: min-content;
+        column-gap: 0.34em;
+        max-width: 100%;
+      }
+      .tang .tk { grid-row: 1; white-space: nowrap; }
+      .tang .tk::after { display: none; }
+      .tang .slot {
+        grid-row: 2;
+        margin-top: 0.25em;
+        padding-top: 0.15em;
+        border-top: 2px solid var(--accent);
+        text-align: center;
+        font-size: 0.62em;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      .tang .slot-soft { border-top-color: var(--muted); color: var(--muted); }
+      .tang .brace {
+        grid-row: 3;
+        height: 0.5em;
+        margin-top: 0.2em;
+        border: 2px solid var(--accent);
+        border-top: 0;
+      }
+      .tang .blabel {
+        grid-row: 4;
+        padding-top: 0.2em;
+        text-align: center;
+        font-size: 0.62em;
+        color: var(--muted);
+      }
+
+      /* the legend doubles as the on/off switch */
+      .marks-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding: 0.85rem 0 0.2rem;
+      }
+      .marks-legend {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        line-height: 2.1;
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+      .marks-toggle {
+        border: 1px solid var(--chip-border);
+        background: var(--chip);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 4px 12px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .marks-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+      /* the answer carries inline marks; the flagged model line carries the
+         diagram, one row per side when the case is a contrast */
+      .test-text .g-nl { line-height: 1.75; }
+      .test-text .g-model { font-style: normal; }
+      .test-text .g-model-row {
+        display: flex;
+        gap: 0.6em;
+        align-items: flex-start;
+        justify-content: center;
+        margin-bottom: 0.5em;
+      }
+      .test-text .g-model-label {
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 0.8em;
+        padding-top: 0.15em;
+      }
+      /* the flagged card is the tallest state the overlay ever shows (answer +
+         promoted rule + a diagram per side), so reserve room for the fixed
+         control bar instead of letting the model slide under it */
+      .test-play { padding-bottom: 108px; }
+
+      body.no-marks .tk {
+        background: none;
+        border: 0;
+        color: inherit;
+        padding: 0;
+        font-weight: inherit;
+      }
+      body.no-marks .tk::after,
+      body.no-marks .tang .slot,
+      body.no-marks .tang .brace,
+      body.no-marks .tang .blabel { display: none; }
+      body.no-marks .annot { line-height: inherit; }
+      body.no-marks .marks-legend { opacity: 0.35; }
+
+      /* A diagram cannot wrap: it is one grid row of columns. So the sentence
+         that outgrows its card scrolls sideways inside it, rather than pushing
+         the whole page wide. The padding leaves the brace label clear of the
+         scrollbar. */
+      .example-nl,
+      .compare-line > span:not(.compare-label) {
+        min-width: 0;
+        max-width: 100%;
+        overflow-x: auto;
+        padding-bottom: 2px;
+      }
+      .compare-line { align-items: flex-start; }
+      .example-nl .tang { font-size: 0.95rem; }
+      /* compare pairs hold the longest sentences in a lesson (they exist to
+         contrast two full clauses), so they get a size of their own */
+      .compare-line .tang { font-size: 0.88rem; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>waar staat het werkwoord?</h1>
+        <button class="theme" id="theme">🌙 / ☀️</button>
+      </header>
+      <p class="sub">
+        <a class="back-link" href="index.html">← alle oefeningen</a>
+        <span id="lesson-meta"></span>
+      </p>
+
+      <div class="rules-card" id="rules-card"></div>
+      <p class="sub" id="rules-hint">Tik op “vertaling” om de Engelse versie van een subregel te zien.</p>
+      <button class="start-btn" id="start" type="button">Oefenen</button>
+    </div>
+
+    <script src="data/grammar.js"></script>
+    <script src="js/drill.js"></script>
+    <script src="js/annotate.js"></script>
+    <script src="js/grammar-ui.js"></script>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var saved = localStorage.getItem("nl-theme");
+        if (saved) root.setAttribute("data-theme", saved);
+        document.getElementById("theme").addEventListener("click", function () {
+          var dark = root.getAttribute("data-theme") === "dark";
+          if (dark) root.removeAttribute("data-theme");
+          else root.setAttribute("data-theme", "dark");
+          localStorage.setItem("nl-theme", dark ? "light" : "dark");
+        });
+
+        var SLUG = "waar-staat-het-werkwoord";
+        GrammarUI.init(GRAMMAR);
+        var L = GRAMMAR.lessons[SLUG];
+        var row = GRAMMAR.curriculum.filter(function (r) { return r.slug === SLUG; })[0];
+        if (!L) {
+          document.getElementById("rules-card").textContent =
+            "Deze les is nog niet gebouwd.";
+          document.getElementById("start").hidden = true;
+          return;
+        }
+        L._slug = SLUG;
+
+        document.getElementById("lesson-meta").textContent =
+          " · fase " + (row ? row.phase : "?") + " · " + L.rules.length + " regels · " +
+          L.cases.length + " gevallen · " + L.cards.length + " kaarten";
+
+        // The rule block uses the same renderer as the index popup, with per-case
+        // miss counts shown so a weak case stands out while you read.
+        GrammarUI.renderRules(document.getElementById("rules-card"), L, { showMisses: true });
+
+        var drill = GrammarUI.createDrill();
+        document.getElementById("start").addEventListener("click", function () {
+          GrammarUI.openLevels(row ? row.title : SLUG, L.cards, drill);
+        });
+      })();
+    </script>
+  </body>
+</html>

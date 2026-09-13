@@ -1,0 +1,1581 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Nederlands oefenen — overzicht</title>
+    <!-- home screen + iOS: standalone launch, icon, themed status bar.
+         Paths are relative so the app works under a GitHub Pages subpath. -->
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="icon-180.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Nederlands" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f0ece3" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1c1b18" />
+    <style>
+      :root {
+        --bg: #f0ece3;
+        --card: #fbf9f4;
+        --ink: #3b3a36;
+        --accent: #3f72a8;
+        --good: #4f9e63;
+        --bad: #c0604a;
+        --muted: #8d877b;
+        --border: #e2dccf;
+        --chip: #ece6da;
+        --chip-border: #ddd4c4;
+        --shadow: rgba(60, 50, 30, 0.07);
+      }
+      :root[data-theme="dark"] {
+        --bg: #1c1b18;
+        --card: #24231f;
+        --ink: #dcd9d0;
+        --accent: #6c9cd6;
+        --good: #5aa86f;
+        --bad: #d4715c;
+        --muted: #9a9388;
+        --border: #403e37;
+        --chip: #34332d;
+        --chip-border: #4a483f;
+        --shadow: rgba(0, 0, 0, 0.45);
+      }
+      * { box-sizing: border-box; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        margin: 0;
+        padding: 2.5rem 1.25rem 4rem;
+        display: flex;
+        justify-content: center;
+      }
+      .wrap { width: 100%; max-width: 720px; }
+      header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 0.35rem;
+      }
+      h1 { font-size: 1.9rem; margin: 0; font-weight: 700; }
+      .sub { color: var(--muted); font-size: 1rem; margin: 0 0 1rem; }
+      .stats { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0 0 1.75rem; }
+      .stat {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 0.35rem 0.85rem;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 6px var(--shadow);
+      }
+      .stat b { color: var(--accent); font-weight: 700; }
+      .stat.total { font-size: 1rem; }
+      .theme {
+        background: var(--chip);
+        border: 1px solid var(--chip-border);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 0.4rem 0.9rem;
+        font-size: 0.85rem;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+      li.row { display: flex; gap: 0.5rem; align-items: stretch; flex-wrap: wrap; }
+      /* on narrow screens the link takes the full row and the buttons wrap below it */
+      @media (max-width: 520px) {
+        li.row > a.item { flex-basis: 100%; }
+        li.row > .words-btn, li.row > .test-btn { flex: 1; }
+      }
+      a.item {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        text-decoration: none;
+        color: inherit;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1rem 1.25rem;
+        box-shadow: 0 2px 6px var(--shadow);
+        transition: transform 0.08s ease, border-color 0.12s ease;
+      }
+      a.item:hover { transform: translateY(-2px); border-color: var(--accent); }
+      /* the title takes the slack so the date and the score sit together on the
+         right; wrapping lets the score drop to its own line on a phone */
+      a.item { flex-wrap: wrap; }
+      .title { font-size: 1.2rem; font-weight: 600; flex: 1 1 auto; }
+      .meta { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
+      /* per-lesson attempt breakdown: how many of this lesson's words you last
+         got right on the 1st / 2nd / 3rd-or-later try */
+      /* always its own line under the title, never squeezed in beside the date:
+         a breakdown that jumps between one line and two as the window resizes
+         is harder to read than one that always sits in the same place */
+      .score {
+        display: flex;
+        flex: 1 0 100%;
+        gap: 0.6rem;
+        margin-top: 0.15rem;
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+      .score:empty { display: none; } /* a lesson never tested says nothing */
+      .score .s1 { color: var(--good); }
+      .score .s2 { color: var(--accent); }
+      .score .s3 { color: var(--bad); }
+      .score .s0 { color: var(--muted); }
+      .empty { color: var(--muted); font-size: 1.05rem; }
+      .words-btn {
+        flex-shrink: 0;
+        background: var(--card);
+        border: 1px solid var(--border);
+        color: var(--ink);
+        border-radius: 14px;
+        padding: 0 1rem;
+        font-size: 0.85rem;
+        cursor: pointer;
+        white-space: nowrap;
+        box-shadow: 0 2px 6px var(--shadow);
+        transition: border-color 0.12s ease;
+      }
+      .words-btn:hover { border-color: var(--accent); color: var(--accent); }
+      a.words-btn { display: flex; align-items: center; text-decoration: none; }
+
+      /* daily routine banner: launches the 100-word EN -> NL session for today */
+      .daily-banner {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        width: 100%;
+        text-align: left;
+        background: var(--accent);
+        color: #fff;
+        border: 1px solid var(--accent);
+        border-radius: 16px;
+        padding: 1.1rem 1.35rem;
+        margin: 0 0 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 4px 14px var(--shadow);
+        transition: filter 0.12s ease, transform 0.08s ease;
+      }
+      .daily-banner:hover { filter: brightness(1.06); transform: translateY(-1px); }
+      .daily-banner-main { font-size: 1.25rem; font-weight: 700; }
+      .daily-banner-sub { font-size: 0.9rem; opacity: 0.92; }
+      /* display:flex above beats the UA rule for [hidden], so say it here */
+      .daily-banner[hidden] { display: none; }
+      /* the weak-word refresher wears the daily banner's shape but not its
+         fill: it is the follow-up to today's set, not a rival to it */
+      .weak-banner {
+        background: var(--card);
+        color: var(--ink);
+        border-color: var(--border);
+        box-shadow: 0 2px 6px var(--shadow);
+      }
+      .weak-banner:hover { filter: none; border-color: var(--accent); }
+      .weak-banner .daily-banner-sub { color: var(--muted); opacity: 1; }
+      .weak-banner:disabled { opacity: 0.5; cursor: default; }
+      .weak-banner:disabled:hover { border-color: var(--border); transform: none; }
+
+      /* daily completion screen (shown inside the test overlay when a clean round ends) */
+      .test-done {
+        display: none;
+        width: 100%;
+        max-width: 620px;
+        flex-direction: column;
+        align-items: center;
+        gap: 2.4vmin;
+        flex: 1;
+        justify-content: center;
+      }
+      .test-done.show { display: flex; }
+      #test-done-title { font-weight: 700; font-size: clamp(1.6rem, 6vw, 3rem); }
+      .test-done-list {
+        width: 100%;
+        max-height: 46vh;
+        overflow-y: auto;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 8px 16px;
+      }
+      .test-done-sub { color: var(--muted); font-size: 0.95rem; padding: 8px 0; }
+      .test-done-empty { color: var(--good); font-size: 1.1rem; padding: 14px 0; }
+      .test-done-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 9px 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 1.05rem;
+      }
+      .test-done-row:last-child { border-bottom: none; }
+      .test-done-row .td-nl { color: var(--accent); font-weight: 600; }
+      .test-done-row .td-en { color: var(--muted); }
+      /* the batch size row: 5 / 10 / 15 / 20 / alles, above the group rows */
+      .batch-sizes {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 2px 0 14px;
+      }
+      .batch-size {
+        background: var(--chip);
+        border: 1px solid var(--chip-border);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .batch-size:hover { border-color: var(--accent); color: var(--accent); }
+      .batch-size.on {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+        font-weight: 600;
+      }
+      #test-done-next {
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 10px;
+        padding: 12px 30px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+      #test-done-next[hidden] { display: none; }
+      #test-done-close {
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 10px;
+        padding: 12px 30px;
+        font-size: 1.1rem;
+        cursor: pointer;
+      }
+
+      /* word-review popup: Dutch-only list to revise, tap a word to reveal English */
+      .rev-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        z-index: 40;
+      }
+      .rev-modal.open { display: flex; }
+      .rev-modal-box {
+        background: var(--card);
+        border-radius: 14px;
+        width: 100%;
+        max-width: 520px;
+        max-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px var(--shadow);
+      }
+      .rev-modal-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--border);
+      }
+      .rev-modal-head span { font-weight: 600; }
+      .rev-modal-head button {
+        border: 1px solid var(--muted);
+        background: transparent;
+        color: var(--ink);
+        border-radius: 20px;
+        padding: 5px 14px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+      .rev-modal-list { overflow-y: auto; padding: 6px 18px 18px; }
+      .rev-sent {
+        padding: 11px 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 1.1rem;
+      }
+      .rev-sent:last-child { border-bottom: none; }
+      .rev-sent-nl {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+      }
+      .rev-pp, .rev-forms { color: var(--muted); font-size: 0.85rem; font-weight: 400; margin-left: 8px; }
+      .rev-hw .rev-term { font-weight: 700; color: var(--accent); }
+      .rev-hw .rev-star { color: var(--accent); font-size: 0.7rem; margin-right: 6px; vertical-align: 1px; }
+      .rev-tr-toggle {
+        border: none;
+        background: none;
+        color: var(--accent);
+        cursor: pointer;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        padding: 0;
+      }
+      .rev-sent-en { color: var(--muted); font-size: 0.95rem; margin-top: 6px; }
+      .rev-sent-en[hidden] { display: none; }
+
+      /* per-lesson "test" button: hands-free EN -> NL flashcards on 30 random words */
+      .test-btn {
+        flex-shrink: 0;
+        background: var(--accent);
+        border: 1px solid var(--accent);
+        color: #fff;
+        border-radius: 14px;
+        padding: 0 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        box-shadow: 0 2px 6px var(--shadow);
+        transition: filter 0.12s ease;
+      }
+      .test-btn:hover { filter: brightness(1.08); }
+
+      /* full-screen test overlay — mirrors the practice page's immersive EN -> NL mode */
+      .test-modal {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        background: var(--bg);
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 6vmin;
+        gap: 4vmin;
+        z-index: 60;
+        text-align: center;
+        overflow-y: auto;
+      }
+      .test-modal.open { display: flex; }
+      .test-exit {
+        position: fixed;
+        top: calc(18px + env(safe-area-inset-top));
+        right: 18px;
+        z-index: 70;
+        border: 1px solid var(--muted);
+        background: transparent;
+        color: var(--muted);
+        border-radius: 20px;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+      .test-title {
+        color: var(--muted);
+        font-size: clamp(1rem, 3vw, 1.6rem);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        max-width: 720px;
+      }
+      .test-setup { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+      .test-setup button {
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 10px;
+        padding: 14px 30px;
+        font-size: 1.2rem;
+        cursor: pointer;
+      }
+      .test-play {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4vmin;
+        flex: 1;
+      }
+      .test-play.show { display: flex; }
+      .test-label {
+        font-size: clamp(1rem, 3vw, 1.8rem);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .test-text { font-weight: 700; line-height: 1.1; overflow-wrap: break-word; width: 100%; }
+      /* font-size is set by Drill.fitText() (js/drill.js) so long words scale down
+         instead of clipping; the clamps below are only a fallback before JS runs. */
+      .test-text .en { font-size: clamp(1.5rem, 6vw, 4rem); }
+      .test-text .nl { font-size: clamp(4rem, 18vw, 16rem); color: var(--accent); white-space: nowrap; }
+      .test-text .pp { font-size: clamp(1rem, 3vw, 2.2rem); color: var(--muted); font-weight: 400; margin-top: 1.5vmin; }
+      /* a verb's principal parts, under the infinitive on the reveal */
+      .test-text .vf {
+        font-size: clamp(0.95rem, 2.6vw, 1.7rem);
+        color: var(--muted);
+        font-weight: 400;
+        margin-top: 1vmin;
+      }
+      .test-text .vf:first-of-type { margin-top: 2vmin; }
+      .test-sub .en { font-size: clamp(1rem, 3vw, 1.8rem); color: var(--muted); }
+      .test-controls {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: calc(26px + env(safe-area-inset-bottom));
+        text-align: center;
+        z-index: 70;
+      }
+      .test-ctrl {
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 10px;
+        padding: 14px 30px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        margin: 0 6px;
+      }
+      .test-ctrl.mistake { background: var(--bad); }
+      .test-ctrl.mistake.marked { background: var(--good); }
+      .test-count { display: block; margin-top: 12px; color: var(--muted); font-size: 0.9rem; }
+      .test-progress {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 6px;
+        background: rgba(138, 132, 121, 0.25);
+        z-index: 70;
+      }
+      .test-progress span { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.3s ease; }
+
+      /* ---- grammar section ---------------------------------------------- */
+      h2.section-head {
+        font-size: 1.05rem;
+        margin: 2.5rem 0 0.85rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        font-weight: 700;
+      }
+      .todo-block {
+        margin-top: 0.9rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 0.9rem 1.15rem;
+        box-shadow: 0 2px 6px var(--shadow);
+      }
+      .todo-block > .todo-head {
+        font-size: 0.8rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        font-weight: 700;
+        margin: 0.85rem 0 0.3rem;
+      }
+      .todo-block > .todo-head:first-child { margin-top: 0; }
+      .todo-row {
+        display: flex;
+        gap: 10px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        padding: 2px 0;
+      }
+      .todo-row .todo-n { opacity: 0.55; min-width: 1.4em; }
+
+      /* ---- grammar drill card ------------------------------------------- */
+      .test-text .g-op {
+        font-size: clamp(0.85rem, 2.4vw, 1.25rem);
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 600;
+        margin-bottom: 1.4vmin;
+      }
+      .test-text .g-front { font-weight: 600; line-height: 1.25; }
+      .test-text .g-wrong { color: var(--bad); }
+      .test-text .g-prompt { color: var(--ink); font-weight: 500; }
+      .test-text .g-nl { color: var(--accent); font-weight: 700; }
+      .test-text .g-opts {
+        margin-top: 1.6vmin;
+        font-size: clamp(1rem, 3vw, 1.6rem);
+        color: var(--ink);
+      }
+      /* the rule line: always present but quiet, promoted when you flag a card */
+      .test-text .g-rule {
+        margin-top: 2.4vmin;
+        font-size: clamp(0.85rem, 2.2vw, 1.1rem);
+        color: var(--muted);
+        font-weight: 400;
+        opacity: 0.7;
+      }
+      .test-text .g-rule.strong {
+        color: var(--accent);
+        opacity: 1;
+        font-size: clamp(1rem, 2.8vw, 1.4rem);
+      }
+      .test-text .g-model {
+        margin-top: 1.1vmin;
+        font-size: clamp(0.8rem, 2vw, 1.05rem);
+        color: var(--muted);
+        font-style: italic;
+      }
+
+      /* ---- sentence annotation (js/annotate.js) ---------------------------
+         Two layers grown from ONE authored string: inline marks on the loaded
+         tokens, and the tang bracket derived from those same marks. Sizes are
+         in em so the marks scale with whatever font-size the host sets,
+         including the one Drill.fitText() computes at runtime.
+         `body.no-marks` strips both layers back to plain Dutch. */
+      .tk { position: relative; padding: 0.08em 0.25em; border-radius: 0.2em; }
+      .tk-first { background: var(--chip); border: 1px solid var(--chip-border); }
+      .tk-verb { background: var(--accent); color: #fff; font-weight: 700; }
+      .tk-end { background: var(--chip); border: 1px dashed var(--muted); font-weight: 600; }
+      .tk-conj {
+        border-bottom: 0.09em solid var(--accent);
+        border-radius: 0;
+        font-weight: 700;
+        padding-bottom: 0;
+      }
+      /* the voorzetselgroep: a pill, because its whole story is that it is a
+         block that can move out of the middenstuk and stand after the verbs */
+      .tk-pp {
+        border: 1px solid var(--muted);
+        border-radius: 999px;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+      }
+      /* the scheidbaar deel: verb material that has left the verb, so it wears
+         the verb's colour without its fill. Read next to a solid .tk-verb, the
+         pair says "these two are one word" without a word of explanation. */
+      .tk-sep {
+        border: 1px dashed var(--accent);
+        color: var(--accent);
+        font-weight: 700;
+      }
+      /* te: a marker, not a verb. Present enough that its absence is visible
+         (which is the whole rule), quiet enough not to compete with the
+         infinitive it licenses. */
+      .tk-te {
+        border: 1px dotted var(--accent);
+        color: var(--accent);
+      }
+      /* the slot number floats clear of the line. Inline mode only: inside a
+         diagram the ruler underneath carries it, so it would be said twice. */
+      .tk[data-slot]::after {
+        content: attr(data-slot);
+        position: absolute;
+        left: 50%;
+        top: -1.15em;
+        transform: translateX(-50%);
+        font-size: 0.36em;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .tk-verb[data-slot]::after,
+      .tk-sep[data-slot]::after { color: var(--accent); }
+      .annot { line-height: 1.9; }
+
+      /* diagram: one grid column per token, ruler on row 2, brace on rows 3-4 */
+      .tang {
+        display: inline-grid;
+        grid-auto-rows: min-content;
+        column-gap: 0.34em;
+        max-width: 100%;
+      }
+      .tang .tk { grid-row: 1; white-space: nowrap; }
+      .tang .tk::after { display: none; }
+      .tang .slot {
+        grid-row: 2;
+        margin-top: 0.25em;
+        padding-top: 0.15em;
+        border-top: 2px solid var(--accent);
+        text-align: center;
+        font-size: 0.62em;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      .tang .slot-soft { border-top-color: var(--muted); color: var(--muted); }
+      .tang .brace {
+        grid-row: 3;
+        height: 0.5em;
+        margin-top: 0.2em;
+        border: 2px solid var(--accent);
+        border-top: 0;
+      }
+      .tang .blabel {
+        grid-row: 4;
+        padding-top: 0.2em;
+        text-align: center;
+        font-size: 0.62em;
+        color: var(--muted);
+      }
+
+      /* the legend doubles as the on/off switch */
+      .marks-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding: 0.85rem 0 0.2rem;
+      }
+      .marks-legend {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        line-height: 2.1;
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+      .marks-toggle {
+        border: 1px solid var(--chip-border);
+        background: var(--chip);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 4px 12px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .marks-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+      /* the answer carries inline marks; the flagged model line carries the
+         diagram, one row per side when the case is a contrast */
+      .test-text .g-nl { line-height: 1.75; }
+      .test-text .g-model { font-style: normal; }
+      .test-text .g-model-row {
+        display: flex;
+        gap: 0.6em;
+        align-items: flex-start;
+        justify-content: center;
+        margin-bottom: 0.5em;
+      }
+      .test-text .g-model-label {
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 0.8em;
+        padding-top: 0.15em;
+      }
+      /* the flagged card is the tallest state the overlay ever shows (answer +
+         promoted rule + a diagram per side), so reserve room for the fixed
+         control bar instead of letting the model slide under it */
+      .test-play { padding-bottom: 108px; }
+
+      body.no-marks .tk {
+        background: none;
+        border: 0;
+        color: inherit;
+        padding: 0;
+        font-weight: inherit;
+      }
+      body.no-marks .tk::after,
+      body.no-marks .tang .slot,
+      body.no-marks .tang .brace,
+      body.no-marks .tang .blabel { display: none; }
+      body.no-marks .annot { line-height: inherit; }
+      body.no-marks .marks-legend { opacity: 0.35; }
+
+      /* set-picker popup: one row per set of 30, showing the words it covers */
+      .set-row {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 14px;
+        margin: 10px 0;
+        cursor: pointer;
+        box-shadow: 0 2px 6px var(--shadow);
+        transition: border-color 0.12s ease;
+      }
+      .set-row:hover { border-color: var(--accent); }
+      .set-row-head { display: block; font-weight: 600; color: var(--accent); margin-bottom: 5px; }
+      .set-row-words { display: block; color: var(--muted); font-size: 0.85rem; line-height: 1.45; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>Nederlands oefenen</h1>
+        <button class="theme" id="theme">🌙 / ☀️</button>
+      </header>
+      <p class="sub">Al je oefenpagina's — nieuwste eerst.</p>
+      <button class="daily-banner" id="daily-start" type="button">
+        <span class="daily-banner-main">Vandaag oefenen</span>
+        <span class="daily-banner-sub" id="daily-banner-sub">100 woorden · EN → NL</span>
+      </button>
+      <button class="daily-banner weak-banner" id="weak-start" type="button" disabled>
+        <span class="daily-banner-main">Zwakke woorden</span>
+        <span class="daily-banner-sub" id="weak-banner-sub"></span>
+      </button>
+      <div class="stats" id="stats"></div>
+      <ul>
+        <!-- PRACTICE_LIST_START -->
+        <li><a class="item" href="practice-uitdrukkingen.html"><span class="title">Nederlandse uitdrukkingen</span><span class="meta">2026-08-15</span></a></li>
+        <li><a class="item" href="practice-dagelijks-leven.html"><span class="title">dagelijks leven: eten, huis &amp; lichaam</span><span class="meta">2026-07-31</span></a></li>
+        <li><a class="item" href="practice-grammatica-basis.html"><span class="title">grammaticawerkwoorden &amp; tijdsbepalingen</span><span class="meta">2026-07-31</span></a></li>
+        <li><a class="item" href="practice-tao-hoofdstuk-3-10.html"><span class="title">Tao hoofdstuk 1-10 (nieuwe woorden)</span><span class="meta">2026-07-17</span></a></li>
+        <li><a class="item" href="practice-sprookje-2.html"><span class="title">sprookjeswoorden (deel 2)</span><span class="meta">2026-07-11</span></a></li>
+        <li><a class="item" href="practice-sprookje-1.html"><span class="title">sprookjeswoorden (deel 1)</span><span class="meta">2026-07-11</span></a></li>
+        <li><a class="item" href="practice-leven-dood-gevoelens.html"><span class="title">leven, dood &amp; gevoelens</span><span class="meta">2026-07-04</span></a></li>
+        <li><a class="item" href="practice-natuur-dieren.html"><span class="title">natuur &amp; dieren</span><span class="meta">2026-07-04</span></a></li>
+        <li><a class="item" href="practice-op-aan-af.html"><span class="title">scheidbare werkwoorden op / aan / af</span><span class="meta">2026-07-04</span></a></li>
+        <li><a class="item" href="practice-plaats-denken.html"><span class="title">plaats, richting &amp; denken</span><span class="meta">2026-07-04</span></a></li>
+        <li><a class="item" href="practice-spullen-kunst.html"><span class="title">spullen: recycleren, materialen, kunst &amp; licht</span><span class="meta">2026-07-04</span></a></li>
+        <li><a class="item" href="practice-prepositions.html"><span class="title">voorzetsels &amp; basisverbindingswoorden</span><span class="meta">2026-07-04</span></a></li>
+        <li><a class="item" href="practice-connectors.html"><span class="title">verbindingswoorden</span><span class="meta">2026-07-04</span></a></li>
+        <!-- PRACTICE_LIST_END -->
+      </ul>
+
+      <h2 class="section-head">Grammatica</h2>
+      <button class="daily-banner" id="grammar-daily" type="button" hidden>
+        <span class="daily-banner-main">Grammatica vandaag</span>
+        <span class="daily-banner-sub" id="grammar-daily-sub">gemengde herhaling</span>
+      </button>
+      <ul id="grammar-list"></ul>
+      <div class="todo-block" id="grammar-todo"></div>
+    </div>
+
+    <!-- word-review popup -->
+    <div class="rev-modal" id="words-modal">
+      <div class="rev-modal-box">
+        <div class="rev-modal-head">
+          <span id="words-modal-title">Woorden</span>
+          <button id="words-modal-toggle-all" type="button">Alles tonen</button>
+          <button id="words-modal-close" type="button">Sluiten</button>
+        </div>
+        <div class="rev-modal-list" id="words-modal-list"></div>
+      </div>
+    </div>
+
+    <!-- hands-free EN -> NL test overlay -->
+    <div class="test-modal" id="test-modal">
+      <button class="test-exit" id="test-exit" type="button">Sluiten</button>
+      <div class="test-title" id="test-title"></div>
+      <div class="test-setup" id="test-setup"></div>
+      <div class="test-play" id="test-play">
+        <div class="test-label" id="test-label"></div>
+        <div class="test-text" id="test-text"></div>
+        <div class="test-sub" id="test-sub"></div>
+        <div class="test-controls">
+          <button class="test-ctrl mistake" id="test-mistake" type="button">Markeer fout</button>
+          <button class="test-ctrl" id="test-toggle" type="button">Pauze</button>
+          <span class="test-count" id="test-count"></span>
+        </div>
+        <div class="test-progress"><span id="test-bar"></span></div>
+      </div>
+      <div class="test-done" id="test-done">
+        <div class="test-title" id="test-done-title"></div>
+        <div class="test-done-list" id="test-done-list"></div>
+        <button id="test-done-next" type="button" hidden>Volgende →</button>
+        <button id="test-done-close" type="button">Klaar</button>
+      </div>
+    </div>
+
+    <!-- set picker: choose which set of 30 words to test -->
+    <div class="rev-modal" id="set-modal">
+      <div class="rev-modal-box">
+        <div class="rev-modal-head">
+          <span id="set-modal-title">Kies een set</span>
+          <button id="set-modal-close" type="button">Sluiten</button>
+        </div>
+        <div class="rev-modal-list" id="set-modal-list"></div>
+      </div>
+    </div>
+
+    <!-- generated from vocabulary/*.csv by build_data.py; do not edit -->
+    <script src="data/vocab.js"></script>
+    <!-- shared hands-free drill engine: rounds, tempo, speech, flag-and-redrill -->
+    <script src="data/grammar.js"></script>
+    <script src="js/drill.js"></script>
+    <script src="js/verbforms.js"></script>
+    <script src="js/batch.js"></script>
+    <!-- per-word attempt history: which try did you get it right on -->
+    <script src="js/wordstats.js"></script>
+    <script src="js/annotate.js"></script>
+    <script src="js/grammar-ui.js"></script>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var saved = localStorage.getItem("nl-theme");
+        if (saved) root.setAttribute("data-theme", saved);
+        document.getElementById("theme").addEventListener("click", function () {
+          var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          root.setAttribute("data-theme", next);
+          localStorage.setItem("nl-theme", next);
+        });
+
+        // ---- daily routine: spaced-repetition state (localStorage only) ----
+        // One key holds every word's box/due plus the day's current set. Empty => fresh start.
+        // keyOf disambiguates identical spellings across kinds (e.g. "licht" noun vs adj).
+        var SRS_KEY = "nl-srs-v1";
+        var DAILY_SIZE = 100;
+        // box -> days until the next review after a correct answer (a simple Leitner ladder)
+        var SRS_INTERVALS = { 1: 3, 2: 7, 3: 16, 4: 35, 5: 90 };
+        var SRS_MAX_BOX = 5;
+
+        // one definition for both per-word stores (SRS scheduling here, attempt
+        // history in js/wordstats.js), so their keyspaces cannot drift apart
+        var keyOf = WordStats.keyOf;
+        function pad2(n) { return String(n).length < 2 ? "0" + n : String(n); }
+        function todayStr() {
+          var d = new Date();
+          return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+        }
+        function addDays(dateStr, n) {
+          var p = dateStr.split("-");
+          var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+          d.setDate(d.getDate() + n);
+          return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+        }
+        function srsLoad() {
+          try {
+            var raw = localStorage.getItem(SRS_KEY);
+            if (raw) {
+              var s = JSON.parse(raw);
+              s.words = s.words || {};
+              s.stats = s.stats || { completed: [] };
+              s.stats.completed = s.stats.completed || [];
+              return s;
+            }
+          } catch (e) {}
+          return { words: {}, current: null, stats: { completed: [] } };
+        }
+        function srsSave(state) {
+          try { localStorage.setItem(SRS_KEY, JSON.stringify(state)); } catch (e) {}
+        }
+        function srsRec(state, k) {
+          return state.words[k] || { box: 0, due: null, seen: 0, missed: 0, last: null };
+        }
+
+        // PURE: choose today's up-to-100 word keys. Review-first (due words, weakest first),
+        // then never-seen words in vocab order, then pull upcoming reviews forward to fill 100.
+        function selectDailySet(state, vocab, today, size) {
+          size = size || DAILY_SIZE;
+          var rows = vocab.map(function (w) { return { k: keyOf(w), r: srsRec(state, keyOf(w)) }; });
+          var due = rows.filter(function (x) { return x.r.box >= 1 && x.r.due && x.r.due <= today; })
+            .sort(function (a, b) {
+              if (a.r.due !== b.r.due) return a.r.due < b.r.due ? -1 : 1;
+              return a.r.box - b.r.box;
+            });
+          var fresh = rows.filter(function (x) { return x.r.box === 0; });
+          var upcoming = rows.filter(function (x) { return x.r.box >= 1 && (!x.r.due || x.r.due > today); })
+            .sort(function (a, b) { return (a.r.due || "9999") < (b.r.due || "9999") ? -1 : 1; });
+          var picked = [], seen = {};
+          function take(list) {
+            for (var i = 0; i < list.length && picked.length < size; i++) {
+              if (!seen[list[i].k]) { seen[list[i].k] = 1; picked.push(list[i].k); }
+            }
+          }
+          take(due); take(fresh); take(upcoming);
+          return picked;
+        }
+
+        // PURE: fold a finished session into the state. Missed => box 1, comes back tomorrow;
+        // correct => box up, next review pushed further out. Returns the (mutated) state.
+        function applyResults(state, keys, missed, today) {
+          var has = missed && missed.has
+            ? function (k) { return missed.has(k); }
+            : function (k) { return missed && missed.indexOf(k) >= 0; };
+          keys.forEach(function (k) {
+            var r = state.words[k] || { box: 0, due: null, seen: 0, missed: 0, last: null };
+            r.seen++;
+            r.last = today;
+            if (has(k)) {
+              r.missed++;
+              r.box = 1;
+              r.due = addDays(today, 1);
+            } else {
+              r.box = Math.min((r.box || 0) + 1, SRS_MAX_BOX);
+              r.due = addDays(today, SRS_INTERVALS[r.box] || 90);
+            }
+            state.words[k] = r;
+          });
+          return state;
+        }
+
+        // expose the pure bits so they can be exercised from the console / tests
+        window.nlSRS = {
+          selectDailySet: selectDailySet, applyResults: applyResults,
+          srsLoad: srsLoad, srsSave: srsSave, keyOf: keyOf,
+          todayStr: todayStr, addDays: addDays
+        };
+
+        // ---- daily routine: banner counts + streak ----
+        function srsCounts(state, today) {
+          var due = 0, fresh = 0;
+          VOCAB.forEach(function (w) {
+            var r = state.words[keyOf(w)];
+            if (!r || r.box === 0) fresh++;
+            else if (r.due && r.due <= today) due++;
+          });
+          return { due: due, fresh: fresh };
+        }
+        function srsStreak(state, today) {
+          var set = {};
+          (state.stats.completed || []).forEach(function (d) { set[d] = 1; });
+          var streak = 0, cur = today;
+          while (set[cur]) { streak++; cur = addDays(cur, -1); }
+          return streak;
+        }
+        function refreshDailyBanner() {
+          var sub = document.getElementById("daily-banner-sub");
+          if (!sub) return;
+          var state = srsLoad(), today = todayStr();
+          var pending = state.current && !state.current.done;
+          var doneToday = state.current && state.current.done && state.current.date === today;
+          var streak = srsStreak(state, today);
+          if (doneToday) {
+            // finished today's set: tapping now starts another fresh, scoring set
+            var c = srsCounts(state, today);
+            var more = Math.min(DAILY_SIZE, c.due + c.fresh);
+            sub.textContent = "Klaar voor vandaag ✓" +
+              (streak ? " · reeks " + streak + " dg" : "") +
+              (more ? " · tik voor nog " + more : " · tik voor een extra set");
+          } else if (pending) {
+            var wrong = (state.current.missed || []).length;
+            sub.textContent = "Hervat je set · " + state.current.keys.length + " woorden" +
+              (wrong ? " · " + wrong + " fout tot nu toe" : "");
+          } else {
+            var c = srsCounts(state, today);
+            var total = Math.min(DAILY_SIZE, c.due + c.fresh);
+            sub.textContent = total + " woorden · " + c.due + " herhalen, " +
+              Math.max(0, total - c.due) + " nieuw" +
+              (streak ? " · reeks " + streak + " dg" : "");
+          }
+        }
+
+        // Word counter: every VOCAB row is a word the user has practiced.
+        var counts = { noun: 0, verb: 0, adj: 0, other: 0 };
+        VOCAB.forEach(function (w) { if (counts[w.k] != null) counts[w.k]++; });
+        var statsEl = document.getElementById("stats");
+        if (statsEl) {
+          var chips = [
+            ['<span class="stat total"><b>' + VOCAB.length + "</b> woorden geleerd</span>"],
+            ['<span class="stat">' + counts.noun + " zelfstandige nw</span>"],
+            ['<span class="stat">' + counts.verb + " werkwoorden</span>"],
+            ['<span class="stat">' + counts.adj + " bijvoeglijke nw</span>"],
+            ['<span class="stat">' + counts.other + " overige</span>"]
+          ];
+          statsEl.innerHTML = chips.join("");
+        }
+
+        var modal = document.getElementById("words-modal");
+        var modalTitle = document.getElementById("words-modal-title");
+        var modalList = document.getElementById("words-modal-list");
+        var toggleAll = document.getElementById("words-modal-toggle-all");
+
+        function setAll(show) {
+          modalList.querySelectorAll(".rev-sent-en").forEach(function (en) { en.hidden = !show; });
+          modalList.querySelectorAll(".rev-tr-toggle").forEach(function (b) {
+            b.textContent = show ? "verberg" : "vertaling";
+          });
+          toggleAll.textContent = show ? "Alles verbergen" : "Alles tonen";
+          toggleAll.dataset.shown = show ? "1" : "";
+        }
+
+        function openWords(title, words) {
+          modalTitle.textContent = title;
+          modalList.innerHTML = "";
+          // flashcard headwords first (stable sort keeps the category/alpha order within each group)
+          var ordered = words.slice().sort(function (a, b) { return (b.hw ? 1 : 0) - (a.hw ? 1 : 0); });
+          ordered.forEach(function (w) {
+            var row = document.createElement("div");
+            row.className = "rev-sent" + (w.hw ? " rev-hw" : "");
+            var nl = document.createElement("div");
+            nl.className = "rev-sent-nl";
+            var term = document.createElement("span");
+            if (w.hw) {
+              var star = document.createElement("span");
+              star.className = "rev-star";
+              star.textContent = "★"; // filled star marks a flashcard word
+              term.appendChild(star);
+            }
+            var label = document.createElement("span");
+            label.className = "rev-term";
+            label.textContent = (w.art ? w.art + " " : "") + w.t;
+            term.appendChild(label);
+            // secondary forms: plural for nouns, the principal parts for verbs
+            var forms = w.k === "verb" ? VerbForms.line(w) : (w.pl || "");
+            if (forms) {
+              var f = document.createElement("span");
+              f.className = "rev-forms";
+              f.textContent = forms;
+              term.appendChild(f);
+            }
+            nl.appendChild(term);
+            row.appendChild(nl);
+            // only words with an English gloss get a reveal toggle (pronouns etc. have none)
+            if (w.m) {
+              var tgl = document.createElement("button");
+              tgl.className = "rev-tr-toggle";
+              tgl.type = "button";
+              tgl.textContent = "vertaling";
+              var en = document.createElement("div");
+              en.className = "rev-sent-en";
+              en.hidden = true;
+              en.textContent = w.m;
+              tgl.addEventListener("click", function () {
+                en.hidden = !en.hidden;
+                tgl.textContent = en.hidden ? "vertaling" : "verberg";
+              });
+              nl.appendChild(tgl);
+              row.appendChild(en);
+            }
+            modalList.appendChild(row);
+          });
+          setAll(false);
+          modal.classList.add("open");
+        }
+
+        toggleAll.addEventListener("click", function () {
+          setAll(!toggleAll.dataset.shown);
+        });
+        document.getElementById("words-modal-close").addEventListener("click", function () {
+          modal.classList.remove("open");
+        });
+        modal.addEventListener("click", function (e) {
+          if (e.target === modal) modal.classList.remove("open");
+        });
+
+        // Group VOCAB by the lesson that introduced each word (slug = href minus practice-/.html).
+        var byLesson = {};
+        VOCAB.forEach(function (w) {
+          if (!w.lesson) return;
+          (byLesson[w.lesson] = byLesson[w.lesson] || []).push(w);
+        });
+
+        // ---- hands-free EN -> NL test, driven by the shared engine in js/drill.js ----
+        // The engine owns rounds, tempo, speech, pause/resume, fullscreen and the
+        // flag-and-redrill loop. What stays here is this page's share: how a WORD
+        // card is drawn, the set picker, and the daily SRS session wrapping a run.
+        var setModal = document.getElementById("set-modal");
+        var setModalTitle = document.getElementById("set-modal-title");
+        var setModalList = document.getElementById("set-modal-list");
+        var testModal = document.getElementById("test-modal");
+        var testDone = document.getElementById("test-done");
+        var esc = Drill.esc;
+
+        var dailyMode = false;    // true while the daily routine runs (vs a per-lesson test)
+        var sessionMissed = null; // keys marked wrong at any point in today's session
+        var dailyKeys = null;     // the word keys making up today's set
+
+        // ---- attempt history (js/wordstats.js) ------------------------------
+        // Every EN -> NL word drill on this page feeds ONE tracker, so a word's
+        // status is the same whether it came from a lesson test, today's set or
+        // the weak-word refresher. Grammar runs pass their own onRoundEnd and
+        // onClose (js/grammar-ui.js), which override the config's, so they never
+        // reach any of this.
+        var tracker = null;      // WordStats run tracker, or null between runs
+        var trackKeys = null;    // the run's pool, for the endless-loop restart
+        var trackLoops = false;  // true when a clean round replays the whole pool
+        var lastFirst = null;    // first-round score of the run just committed
+        var lessonRows = [];     // {el, words} per index row, for redrawing scores
+
+        function startTracking(items, loops) {
+          commitTracking();
+          trackKeys = items.map(keyOf);
+          trackLoops = !!loops;
+          lastFirst = null;
+          tracker = WordStats.startRun(trackKeys);
+        }
+
+        function commitTracking() {
+          if (!tracker) return;
+          var res = tracker.results();
+          lastFirst = tracker.first();
+          tracker = null;
+          if (!res.length) return; // closed before a round ended: nothing is known
+          var st = WordStats.load();
+          WordStats.fold(st, res, Date.now());
+          WordStats.save(st);
+          refreshWordStats();
+        }
+
+        function renderScore(el, s, total) {
+          if (!s.tested) { el.innerHTML = ""; return; }
+          var rest = total - s.tested;
+          el.innerHTML =
+            '<span class="s1">1e ' + s.a1 + "</span>" +
+            '<span class="s2">2e ' + s.a2 + "</span>" +
+            '<span class="s3">3e+ ' + s.a3 + "</span>" +
+            (rest > 0 ? '<span class="s0">· ' + rest + " nog niet</span>" : "");
+        }
+
+        // Redraw everything derived from the store: the per-lesson breakdown on
+        // each row, and the refresher banner.
+        function refreshWordStats() {
+          var st = WordStats.load();
+          lessonRows.forEach(function (row) {
+            renderScore(row.el, WordStats.summary(st, row.words), row.words.length);
+          });
+          var btn = document.getElementById("weak-start");
+          if (!btn) return;
+          var all = WordStats.summary(st, testableVocab());
+          // Visible from the first visit, dimmed until there is something to
+          // drill: a button that only appears once you have used the feature
+          // cannot tell you the feature exists.
+          btn.disabled = !all.tested;
+          document.getElementById("weak-banner-sub").textContent = !all.tested
+            ? "nog geen resultaten · doe eerst een test hieronder"
+            : all.weak
+              ? "2e " + all.a2 + " · 3e+ " + all.a3 + " · zwakste eerst"
+              : all.tested + " geoefend · langst niet gezien eerst";
+        }
+
+        // Only words with an English gloss can be prompted EN -> NL.
+        function testableVocab() {
+          return VOCAB.filter(function (w) { return w.m; });
+        }
+
+        // Dutch display form: nouns carry their article, others just the lemma.
+        function withArt(w) { return (w.art ? w.art + " " : "") + w.t; }
+
+        // Not every card is one word. An idiom ("de handen uit de mouwen
+        // steken") cannot be sized like a headword: Drill.fitText defaults to
+        // nowrap, and once it hits its 20px floor it stops shrinking and the
+        // text simply runs off the screen.
+        //
+        // Wrapping is the rescue, not the default. Testing for a space would
+        // catch every noun, since withArt() makes them all "de X", and would
+        // change how the whole existing deck renders. So: fit as before, and
+        // only re-fit with wrapping when nowrap demonstrably failed. Anything
+        // that fits today is byte-for-byte untouched.
+        function fitTerm(x, el, capFrac) {
+          if (!el) return;
+          x.fitText(el, x.container, capFrac);
+          var avail = (x.container && x.container.clientWidth) || window.innerWidth;
+          if (el.scrollWidth - avail > 4) {
+            x.fitText(el, x.container, capFrac, { nowrap: false, maxHeightFrac: 0.4 });
+          }
+        }
+
+        var drill = Drill.create({
+          nodes: {
+            modal: testModal,
+            title: document.getElementById("test-title"),
+            setup: document.getElementById("test-setup"),
+            play: document.getElementById("test-play"),
+            label: document.getElementById("test-label"),
+            text: document.getElementById("test-text"),
+            sub: document.getElementById("test-sub"),
+            count: document.getElementById("test-count"),
+            bar: document.getElementById("test-bar"),
+            done: testDone,
+            toggleBtn: document.getElementById("test-toggle"),
+            mistakeBtn: document.getElementById("test-mistake"),
+          },
+          tempos: [["Normaal tempo", 1], ["Meer denktijd", 1.7]],
+          // front: the English gloss, started smaller than the Dutch reveal
+          renderFront: function (c, x) {
+            x.text.innerHTML = '<div class="en">' + esc(c.m) + "</div>";
+            fitTerm(x, x.text.querySelector(".en"), 0.16);
+            x.sub.innerHTML = "";
+          },
+          // back: the big Dutch word, English small underneath. A verb also gets
+          // its principal parts, because the infinitive alone is the thing that
+          // leaves you knowing "eten" and not "je eet" or "heeft gegeten". The
+          // headline shrinks a little to pay for the two extra lines.
+          renderBack: function (c, x) {
+            var extra = c.k === "verb"
+              ? VerbForms.rows(c).map(function (r) {
+                  return '<div class="vf">' + esc(r) + "</div>";
+                }).join("")
+              : (c.pp ? '<div class="pp">(' + esc(c.pp) + ")</div>" : "");
+            x.text.innerHTML = '<div class="nl">' + esc(withArt(c)) + "</div>" + extra;
+            fitTerm(x, x.text.querySelector(".nl"), c.k === "verb" ? 0.32 : 0.42);
+            x.sub.innerHTML = '<div class="en">' + esc(c.m) + "</div>";
+          },
+          speakText: function (c) { return withArt(c); },
+          thinkMs: function (c, pace) { return (2500 + c.t.length * 120) * pace; },
+          repeatMs: function (c, pace) { return (4500 + c.t.length * 150) * pace; },
+          onRoundEnd: function (miss) {
+            if (dailyMode && sessionMissed) {
+              miss.forEach(function (c) { sessionMissed.add(keyOf(c)); });
+            }
+            if (!tracker) return;
+            tracker.round(miss.map(keyOf));
+            // A run without terminateOnCleanRound replays the WHOLE pool after
+            // a clean round. That is a new run, not further attempts on words
+            // already answered, so bank this one and start the next.
+            if (tracker.done()) {
+              commitTracking();
+              if (trackLoops) tracker = WordStats.startRun(trackKeys);
+            }
+          },
+          // A clean round ends the run only when something asked it to: the
+          // daily session, or a batch that wants to hand you the next group.
+          onFinish: function () { dailyMode ? finishDaily() : finishBatch(); },
+          onClose: function () {
+            persistDailyProgress(); // save wrong-so-far before teardown, if mid-session
+            commitTracking();       // bank the attempts of the run being torn down
+            dailyMode = false;
+            refreshDailyBanner();
+          },
+        });
+
+        // step 1: clicking "test" opens a popup that splits the lesson's words
+        // into groups of the size you pick (5 / 10 / 15 / 20 / alles, remembered
+        // between sessions). Each row lists the words it covers; picking one
+        // runs the EN -> NL test on just that group, and finishing it cleanly
+        // offers the next one. js/batch.js owns the split and the size row.
+        var batch = null; // { name, groups, idx } while a batch run is active
+
+        function openTest(name, words) {
+          setModalTitle.textContent = name + " \u2014 kies een groep";
+          Batch.buildPicker(setModalList, words, {
+            classes: { sizeBar: "batch-sizes", size: "batch-size", sizeOn: "on" },
+            describe: function (items) { return items.map(withArt).join(", "); },
+            headLabel: function (i, n, items) {
+              return n > 1
+                ? "Groep " + i + " van " + n + " \u00b7 " + items.length + " woorden"
+                : "Alles \u00b7 " + items.length + " woorden";
+            },
+            onPick: function (items, i, groups) {
+              setModal.classList.remove("open");
+              dailyMode = false;
+              batch = { name: name, groups: groups, idx: i };
+              startBatch();
+            },
+          });
+          setModal.classList.add("open");
+        }
+
+        // Run the current group. terminateOnCleanRound only when the pool was
+        // actually split: with "alles" the run should loop exactly as it always
+        // did, so a single-group batch keeps the old endless behaviour.
+        function startBatch() {
+          var items = batch.groups[batch.idx];
+          var many = batch.groups.length > 1;
+          startTracking(items, !many); // a single group loops forever; batches stop
+          drill.start(items, batch.name +
+            (many ? " \u2014 groep " + (batch.idx + 1) + "/" + batch.groups.length : "") +
+            " \u00b7 test EN \u2192 NL (" + items.length + " woorden)",
+            { terminateOnCleanRound: many });
+        }
+
+        // Clean round on a batch: say so, and offer the next group.
+        function finishBatch() {
+          if (!batch) return;
+          var last = batch.idx + 1 >= batch.groups.length;
+          document.getElementById("test-done-title").textContent =
+            "Groep " + (batch.idx + 1) + " van " + batch.groups.length + " klaar";
+          var listEl = document.getElementById("test-done-list");
+          listEl.innerHTML = "";
+          var ok = document.createElement("div");
+          ok.className = "test-done-empty";
+          ok.textContent = last
+            ? "Alle groepen klaar. Sterk!"
+            : "Geen fouten. Door naar de volgende groep?";
+          listEl.appendChild(ok);
+          // the round that actually scores you: the only one covering the group
+          if (lastFirst) {
+            var f = document.createElement("div");
+            f.className = "test-done-sub";
+            f.textContent = "Eerste ronde: " + lastFirst.ok + " / " +
+              lastFirst.total + " meteen goed";
+            listEl.appendChild(f);
+          }
+          var nextBtn = document.getElementById("test-done-next");
+          nextBtn.hidden = last;
+          if (!last) {
+            nextBtn.textContent = "Volgende " +
+              batch.groups[batch.idx + 1].length + " \u2192";
+          }
+          drill.showDone();
+        }
+
+        // ---- zwakke woorden --------------------------------------------------
+        // The refresher. Its whole content is an ORDER, which lives in
+        // WordStats.queue: worst last result first, and inside a rank the words
+        // you have not seen for longest. Everything else — the size picker, the
+        // groups, the "volgende" flow — is the lesson test's, reused unchanged,
+        // so a word drilled here records exactly as it does anywhere else.
+        function openWeak() {
+          var pool = WordStats.queue(WordStats.load(), testableVocab());
+          if (pool.length) openTest("Zwakke woorden", pool);
+        }
+
+        function nextBatch() {
+          if (!batch || batch.idx + 1 >= batch.groups.length) return;
+          batch.idx++;
+          startBatch();
+        }
+
+
+        // daily routine: build (or resume) today's set, then run it as a terminating
+        // drill. Repeats are allowed: once a set is finished you can start another
+        // the same day, and each set scores independently.
+        function startDaily() {
+          var today = todayStr();
+          var state = srsLoad();
+          var cur = state.current;
+          var keys, restoredMissed = [];
+          if (cur && cur.keys && cur.keys.length && !cur.done) {
+            keys = cur.keys; // resume a set interrupted by an abrupt close
+            restoredMissed = cur.missed || [];
+          } else {
+            keys = selectDailySet(state, VOCAB, today);
+            state.current = { date: today, keys: keys, done: false, missed: [] };
+            srsSave(state);
+          }
+          var byKey = {};
+          VOCAB.forEach(function (w) { byKey[keyOf(w)] = w; });
+          dailyKeys = keys;
+          var pool = keys.map(function (k) { return byKey[k]; }).filter(Boolean);
+          dailyMode = true;
+          sessionMissed = new Set(restoredMissed);
+          startTracking(pool, false);
+          drill.start(pool, "Vandaag \u00b7 " + pool.length + " woorden \u00b7 EN \u2192 NL",
+            { terminateOnCleanRound: true });
+        }
+
+        // Persist the words missed so far in an in-progress daily set. Folds the
+        // current round's live marks (which sessionMissed does not hold until a
+        // round ends) into the session set, then stores it under state.current.
+        function persistDailyProgress() {
+          if (!dailyMode || !sessionMissed) return;
+          drill.liveMistakes().forEach(function (c) { sessionMissed.add(keyOf(c)); });
+          var state = srsLoad();
+          if (state.current && !state.current.done) {
+            state.current.missed = Array.from(sessionMissed);
+            srsSave(state);
+          }
+        }
+
+        // daily session over: fold results into SRS state (once per day), then summarise
+        function finishDaily() {
+          var today = todayStr();
+          var state = srsLoad();
+          var alreadyDone = state.current && state.current.done && state.current.date === today;
+          if (!alreadyDone) {
+            state = applyResults(state, dailyKeys, sessionMissed, today);
+            if (!state.current) state.current = { date: today, keys: dailyKeys };
+            state.current.done = true;
+            state.stats = state.stats || { completed: [] };
+            if (state.stats.completed.indexOf(today) < 0) state.stats.completed.push(today);
+            srsSave(state);
+          }
+          renderDailyDone(Array.from(sessionMissed));
+          refreshDailyBanner();
+        }
+
+        function renderDailyDone(missedArr) {
+          var total = dailyKeys ? dailyKeys.length : 0;
+          var wrong = missedArr.length;
+          document.getElementById("test-done-title").textContent =
+            "Klaar! " + (total - wrong) + " / " + total + " goed";
+          var listEl = document.getElementById("test-done-list");
+          listEl.innerHTML = "";
+          if (!wrong) {
+            var ok = document.createElement("div");
+            ok.className = "test-done-empty";
+            ok.textContent = "Geen fouten. Sterk!";
+            listEl.appendChild(ok);
+          } else {
+            var byKey = {};
+            VOCAB.forEach(function (w) { byKey[keyOf(w)] = w; });
+            var h = document.createElement("div");
+            h.className = "test-done-sub";
+            h.textContent = wrong + " woord(en) komen binnenkort terug:";
+            listEl.appendChild(h);
+            missedArr.forEach(function (k) {
+              var w = byKey[k];
+              if (!w) return;
+              var row = document.createElement("div");
+              row.className = "test-done-row";
+              row.innerHTML = '<span class="td-nl">' + esc(withArt(w)) +
+                '</span><span class="td-en">' + esc(w.m) + "</span>";
+              listEl.appendChild(row);
+            });
+          }
+          drill.showDone();
+        }
+
+        document.getElementById("test-exit").addEventListener("click", drill.close);
+        document.getElementById("test-done-close").addEventListener("click", drill.close);
+        document.getElementById("test-done-next").addEventListener("click", nextBatch);
+        document.getElementById("daily-start").addEventListener("click", startDaily);
+        document.getElementById("weak-start").addEventListener("click", openWeak);
+        document.getElementById("set-modal-close").addEventListener("click", function () {
+          setModal.classList.remove("open");
+        });
+        setModal.addEventListener("click", function (e) {
+          if (e.target === setModal) setModal.classList.remove("open");
+        });
+        if (window.speechSynthesis) speechSynthesis.onvoiceschanged = function () {};
+
+        // One "N woorden" button per lesson row, opening a popup of the words it introduced.
+        document.querySelectorAll("ul li > a.item").forEach(function (a) {
+          var href = a.getAttribute("href");
+          var slug = href.replace(/^practice-/, "").replace(/\.html$/, "");
+          var words = byLesson[slug];
+          if (!words || !words.length) return;
+          var li = a.parentElement;
+          li.classList.add("row");
+          var name = (a.querySelector(".title") || {}).textContent || href;
+          // The row advertises what the lesson TAUGHT (its flashcard terms),
+          // not every word that happened to appear in an example sentence.
+          // Those two had drifted far apart: op-aan-af is a lesson about 34
+          // separable verbs, and counting sentence vocabulary billed it as 307.
+          // The popup still lists everything, so nothing is hidden; its title
+          // carries both numbers so the smaller button never looks like a bug.
+          var taught = words.filter(function (w) { return w.hw; });
+          var shown = taught.length || words.length;
+
+          // attempt breakdown, filled by refreshWordStats(). Only the words the
+          // drill can actually prompt (they need an English gloss) are counted,
+          // so the numbers add up to something you can reach.
+          var scoreEl = document.createElement("span");
+          scoreEl.className = "score";
+          a.appendChild(scoreEl);
+          lessonRows.push({
+            el: scoreEl,
+            words: words.filter(function (w) { return w.m; }),
+          });
+          var btn = document.createElement("button");
+          btn.className = "words-btn";
+          btn.type = "button";
+          btn.textContent = shown + " woorden";
+          btn.addEventListener("click", function () {
+            openWords(name + " — " + shown + " geleerd" +
+              (words.length > shown ? " · " + words.length + " in totaal" : ""), words);
+          });
+          li.appendChild(btn);
+
+          // "test" button: hands-free EN -> NL flashcards on up to 30 random words.
+          // Only words with an English gloss can be prompted, so filter those.
+          var testable = words.filter(function (w) { return w.m; });
+          if (testable.length) {
+            var tbtn = document.createElement("button");
+            tbtn.className = "test-btn";
+            tbtn.type = "button";
+            tbtn.textContent = "test";
+            tbtn.addEventListener("click", function () {
+              openTest(name, testable);
+            });
+            li.appendChild(tbtn);
+          }
+        });
+
+        // ---- grammatica ------------------------------------------------------
+        // All grammar-specific UI (card renderers, rules popup, level/direction
+        // picker, miss counting) lives in js/grammar-ui.js so the lesson pages
+        // render identically. Here we only lay out the section.
+        (function () {
+          if (typeof GRAMMAR === "undefined" || !GRAMMAR.curriculum) return;
+          GrammarUI.init(GRAMMAR);
+
+          var built = GRAMMAR.curriculum.filter(function (r) { return r.status === "done"; });
+          var listEl = document.getElementById("grammar-list");
+          built.forEach(function (r) {
+            var L = GRAMMAR.lessons[r.slug];
+            if (!L) return;
+            L._slug = r.slug; // so the rules view can look up per-case miss counts
+            var li = document.createElement("li");
+            li.className = "row";
+            var a = document.createElement("a");
+            a.className = "item";
+            a.href = "grammar-" + r.slug + ".html";
+            a.innerHTML = '<span class="title"></span><span class="meta"></span>';
+            a.querySelector(".title").textContent = r.title;
+            a.querySelector(".meta").textContent =
+              "fase " + r.phase + " · " + L.cards.length + " kaarten";
+            li.appendChild(a);
+            // rules live on the lesson page, not in a popup: it is the only
+            // surface wide enough for sub-rules with several examples each
+            var rb = document.createElement("a");
+            rb.className = "words-btn";
+            rb.href = a.href;
+            rb.textContent = L.rules.length + " regels";
+            li.appendChild(rb);
+            var db = document.createElement("button");
+            db.className = "test-btn";
+            db.type = "button";
+            db.textContent = "oefen";
+            db.addEventListener("click", function () {
+              GrammarUI.openLevels(r.title, L.cards, drill);
+            });
+            li.appendChild(db);
+            listEl.appendChild(li);
+          });
+
+          // --- "nog te doen", grouped by phase, one quiet line each.
+          // Phase names are deliberately NOT lesson names: this block renders
+          // directly under the built-lesson list, so a phase called "waar staan
+          // de werkwoorden" sitting above "waar staat het werkwoord?" reads as
+          // one lesson with the rows beneath it as its contents.
+          // Keep in sync with the "## Phases" list in grammar/curriculum.md.
+          var PHASES = {
+            1: "Fase 1 · zinsbouw",
+            2: "Fase 2 · tijd en vorm",
+            3: "Fase 3 · het woordje er",
+            4: "Fase 4 · modaliteit en ontkenning",
+            5: "Fase 5 · overeenkomst en vaste combinaties",
+          };
+          var todoEl = document.getElementById("grammar-todo");
+          var todo = GRAMMAR.curriculum.filter(function (r) { return r.status !== "done"; });
+          if (!todo.length) {
+            todoEl.hidden = true;
+          } else {
+            var lastPhase = null;
+            todo.forEach(function (r) {
+              if (r.phase !== lastPhase) {
+                var h = document.createElement("div");
+                h.className = "todo-head";
+                h.textContent = PHASES[r.phase] || "Fase " + r.phase;
+                todoEl.appendChild(h);
+                lastPhase = r.phase;
+              }
+              var row = document.createElement("div");
+              row.className = "todo-row";
+              var num = document.createElement("span");
+              num.className = "todo-n";
+              num.textContent = r.n + ".";
+              var name = document.createElement("span");
+              name.textContent = r.title;
+              row.appendChild(num);
+              row.appendChild(name);
+              todoEl.appendChild(row);
+            });
+          }
+
+          // --- mixed review: only meaningful once more than one lesson exists,
+          // because within a single lesson you already know which rule is coming.
+          var gBanner = document.getElementById("grammar-daily");
+          if (built.length > 1) {
+            var all = [];
+            built.forEach(function (r) { all = all.concat(GRAMMAR.lessons[r.slug].cards); });
+            document.getElementById("grammar-daily-sub").textContent =
+              "20 kaarten door elkaar · " + built.length + " lessen";
+            gBanner.hidden = false;
+            gBanner.addEventListener("click", function () {
+              GrammarUI.start(drill, "Grammatica vandaag", Drill.shuffle(all).slice(0, 20));
+            });
+          }
+        })();
+
+        refreshDailyBanner();
+        refreshWordStats();
+      })();
+    </script>
+  </body>
+</html>
